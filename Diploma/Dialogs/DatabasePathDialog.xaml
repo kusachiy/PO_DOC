@@ -1,0 +1,62 @@
+﻿<controls:MetroWindow
+        x:Class="Diploma.Dialogs.DatabasePathDialog"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Diploma.Dialogs"
+        xmlns:mycontrols="clr-namespace:Diploma.Controls"
+        xmlns:managers="clr-namespace:Diploma.Controls.Managers"    
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        mc:Ignorable="d"
+        LostFocus="MetroWindow_LostFocus"
+        ResizeMode="NoResize"
+        Title="Настройки" Width="550" Height="190" >
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type managers:PanelManager}">
+            <mycontrols:Panel />
+        </DataTemplate>
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding Loaded}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding Close}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.Resources>           
+           
+        </Grid.Resources>
+        <GroupBox Header="Базы данных не существует или она повреждена">
+            <Grid Height="30" Margin="10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox controls:TextBoxHelper.Watermark="Укажите путь к новой базе. Приложение создаст её копию в своём каталоге." Grid.Column="0" HorizontalAlignment="Stretch" Text="{Binding Path}" IsReadOnly="True" Margin="5,0" ></TextBox>
+                <Button Grid.Column="1" Content="Обзор" HorizontalAlignment="Stretch" Command="{Binding SelectFileCommand}"></Button>
+            </Grid>
+        </GroupBox>       
+
+        <controls:Flyout
+            Grid.Row="1"
+            CloseButtonVisibility="Collapsed"
+            IsOpen="True"
+            IsPinned="True"
+            Position="Bottom"
+            TitleVisibility="Collapsed">
+            <Grid>
+                <ContentControl Content="{Binding Panel}" />
+            </Grid>
+        </controls:Flyout>
+    </Grid>
+</controls:MetroWindow>

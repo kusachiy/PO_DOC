@@ -1,0 +1,76 @@
+﻿<UserControl
+    x:Class="Diploma.Screens.EmployeesScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:Diploma.Screens"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding Loaded}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <GroupBox Header="Table">
+            <DataGrid
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding Employees}"
+                SelectedItem="{Binding SelectedEmployee}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Имя" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding StringDegree}"
+                        Header="Ученая степень" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding StringRank}"
+                        Header="Ученое звание" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding StringPosition}"
+                        Header="Рабочая должность" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding Rate, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Ставка" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding ContractNumber, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Номер контракта" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding BirthDay, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Дата рождения" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <controls:Flyout
+            Grid.Row="1"
+            Background="{DynamicResource HighlightBrush}"
+            CloseButtonVisibility="Collapsed"
+            IsOpen="True"
+            IsPinned="True"
+            Position="Bottom"
+            TitleVisibility="Collapsed">
+            <ContentControl Content="{Binding Panel}" />
+        </controls:Flyout>
+    </Grid>
+</UserControl>

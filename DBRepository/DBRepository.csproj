@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B685A3A9-AC32-40D9-8FEE-EB5780A73AE5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DBRepository</RootNamespace>
+    <AssemblyName>DBRepository</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="JetEntityFrameworkProvider, Version=6.0.0.0, Culture=neutral, PublicKeyToken=756cf6beb8fe7b41, processorArchitecture=x86">
+      <HintPath>..\packages\JetEntityFrameworkProvider.6.1.4\lib\JetEntityFrameworkProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Mehdime.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mehdime.Entity.1.0.0\lib\Mehdime.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Context.cs" />
+    <Compile Include="Factories\AccessContextFactory.cs" />
+    <Compile Include="Factories\SQLSERVERContextFactory.cs" />
+    <Compile Include="Factories\SwitchableContetxFactory.cs" />
+    <Compile Include="Migrations\201803212050044_Initial.cs" />
+    <Compile Include="Migrations\201803212050044_Initial.Designer.cs">
+      <DependentUpon>201803212050044_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803232019569_chc.cs" />
+    <Compile Include="Migrations\201803232019569_chc.Designer.cs">
+      <DependentUpon>201803232019569_chc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803291025529_SpecPos.cs" />
+    <Compile Include="Migrations\201803291025529_SpecPos.Designer.cs">
+      <DependentUpon>201803291025529_SpecPos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories\DisciplineYearRepository.cs" />
+    <Compile Include="Repositories\DisciplineWorkloadRepository.cs" />
+    <Compile Include="Repositories\FacultyRepository.cs" />
+    <Compile Include="Repositories\EmployeeRepository.cs" />
+    <Compile Include="Repositories\DisciplineRepository.cs" />
+    <Compile Include="Repositories\DepartmentsRepository.cs" />
+    <Compile Include="Repositories\SpecialPositionRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDisciplineYearRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDisciplineWorkloadRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IFacultyRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IEmployeeRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDisciplineRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IEntityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDepartmentRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ISpecialPositionRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IGroupRepository.cs" />
+    <Compile Include="Repositories\GroupsRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ISemesterRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ISpecialityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IWorkloadRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IStudyYearRepository.cs" />
+    <Compile Include="Repositories\SemesterRepository.cs" />
+    <Compile Include="Repositories\SpecialityRepository.cs" />
+    <Compile Include="Repositories\WorkloadRepository.cs" />
+    <Compile Include="Repositories\StudyYearRepository.cs" />
+    <Compile Include="Workers\DbWorker.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\EntityRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IStudentsRepository.cs" />
+    <Compile Include="Repositories\StudentsRepository.cs" />
+    <Compile Include="Workers\Disposable.cs" />
+    <Compile Include="Workers\Interfaces\IDbWorker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{D0260F69-A6C7-4B71-AB7E-1C6ADCC1E413}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803212050044_Initial.resx">
+      <DependentUpon>201803212050044_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803232019569_chc.resx">
+      <DependentUpon>201803232019569_chc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803291025529_SpecPos.resx">
+      <DependentUpon>201803291025529_SpecPos.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

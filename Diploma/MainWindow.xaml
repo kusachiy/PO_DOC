@@ -1,0 +1,187 @@
+﻿<controls:MetroWindow
+    x:Class="Diploma.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:basecontrols="clr-namespace:Diploma.Controls"
+    xmlns:basemanagers="clr-namespace:Diploma.Controls.Managers"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:Diploma"
+    xmlns:managers="clr-namespace:Diploma.Screens.Managers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:screens="clr-namespace:Diploma.Screens"
+    Title="{Binding Title}"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+    <controls:MetroWindow.DataContext>
+        <local:MainManager />
+    </controls:MetroWindow.DataContext>
+    <controls:MetroWindow.Resources>
+        <DataTemplate DataType="{x:Type managers:DepartmentsManager}">
+            <screens:DepartmentsScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:DisciplinesManager}">
+            <screens:DisciplinesScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:EmployeesManager}">
+            <screens:EmployeesScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:FacultiesManager}">
+            <screens:FacultiesScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:GroupsManager}">
+            <screens:GroupsScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:SpecialitiesManager}">
+            <screens:SpecialitiesScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:WorkloadManager}">
+            <screens:WorkloadsScreen />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type basemanagers:PanelManager}">
+            <basecontrols:Panel />
+        </DataTemplate>
+    </controls:MetroWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type controls:HamburgerMenuIconItem}">
+                <Grid
+                    x:Name="RootGrid"
+                    Height="48"
+                    Background="Transparent"
+                    Cursor="Hand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <iconPacks:PackIconModern
+                        Grid.Column="0"
+                        Width="32"
+                        Height="32"
+                        Margin="4"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource IdealForegroundColorBrush}"
+                        Kind="{Binding Icon}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Foreground="White"
+                        Text="{Binding Label}" />
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:HamburgerMenu}}, Path=IsPaneOpen}" Value="False">
+                        <Setter TargetName="RootGrid" Property="ToolTip" Value="{Binding ToolTip, Mode=OneWay}" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </Grid.Resources>
+        <Menu
+            Grid.Row="0"
+            Padding="10,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}">
+            <MenuItem
+                Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                Foreground="White"
+                Header="Данные">
+                <MenuItem                  
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Command="{Binding ImportCommand}"
+                    Foreground="White"                  
+                    Icon="{iconPacks:Entypo Kind=ArrowLeft}"
+                    Header="Импорт">
+                </MenuItem>
+                <MenuItem
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Command="{Binding ExportCommand}"
+                    Foreground="White"
+                    Icon="{iconPacks:Entypo Kind=ArrowRight}"                   
+                    Header="Экспорт" />
+                <MenuItem                    
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Command="{Binding ShowSemestersDialog}"
+                    Foreground="White"
+                    Icon="{iconPacks:Entypo Kind=Calendar}"  
+                    Header="Длительность семестров" />
+                <MenuItem                    
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Command="{Binding ShowSpecialPositionsDialog}"
+                    Foreground="White"
+                    Icon="{iconPacks:Material Kind=AccountBox}"  
+                    Header="Специальные должности" />
+            </MenuItem>
+
+            <MenuItem
+                Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                Foreground="White"
+                Header="Настройки">                
+                <MenuItem
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Command="{Binding ImportSettingsCommand}"
+                    Foreground="White"
+                    Header="Настройки импорта" />
+                <MenuItem
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Command="{Binding ExportSettingsCommand}"
+                    Foreground="White"
+                    Header="Настройки экспорта" />
+                <MenuItem
+                    Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
+                    Foreground="White"
+                    Header="Настройки расчётов" />
+            </MenuItem>
+        </Menu>
+        <controls:ProgressRing
+            Grid.Row="1"
+            Panel.ZIndex="1000"
+            IsActive="{Binding Waiting}" />
+        <controls:HamburgerMenu
+            x:Name="HamburgerMenuControl"
+            Grid.Row="1"
+            Content="{Binding SelectedTab}"
+            DisplayMode="CompactInline"
+            Foreground="White"
+            IsPaneOpen="False"
+            ItemTemplate="{StaticResource MenuItemTemplate}"
+            ItemsSource="{Binding TabScreens}"
+            OptionsItemTemplate="{StaticResource MenuItemTemplate}"
+            SelectedItem="{Binding SelectedTab}">
+
+            <!--  Content  -->
+            <controls:HamburgerMenu.ContentTemplate>
+                <DataTemplate DataType="{x:Type controls:HamburgerMenuItem}">
+                    <Grid x:Name="TheContentGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="48" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}">
+                            <TextBlock
+                                x:Name="Header"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                Foreground="White"
+                                Text="{Binding Label}" />
+                        </Border>
+                        <ContentControl
+                            x:Name="TheContent"
+                            Grid.Row="1"
+                            Content="{Binding Screen}"
+                            Focusable="False"
+                            Foreground="{DynamicResource BlackBrush}" />
+                    </Grid>
+                </DataTemplate>
+            </controls:HamburgerMenu.ContentTemplate>
+        </controls:HamburgerMenu>
+    </Grid>
+</controls:MetroWindow>

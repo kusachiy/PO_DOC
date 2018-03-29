@@ -1,0 +1,69 @@
+﻿<UserControl
+    x:Class="Diploma.Screens.DisciplinesScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:Diploma.Screens"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="btv" />
+    </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding Loaded}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <GroupBox Header="Table">
+            <DataGrid
+                Margin="0,10,0,-10"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                IsSynchronizedWithCurrentItem="True"
+                ItemsSource="{Binding Disciplines}"
+                SelectedItem="{Binding SelectedDiscipline}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Наименование" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding Department, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                        Header="Кафедра" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding StringSpecial, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                        Header="Сложность" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding StringSpecialType, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                        Header="Тип специльных расчётов"
+                        Visibility="{Binding Path=IsSpecial, Converter={StaticResource btv}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <controls:Flyout
+            Grid.Row="1"
+            Background="{DynamicResource HighlightBrush}"
+            CloseButtonVisibility="Collapsed"
+            IsOpen="True"
+            IsPinned="True"
+            Position="Bottom"
+            TitleVisibility="Collapsed">
+            <ContentControl Content="{Binding Panel}" />
+        </controls:Flyout>
+    </Grid>
+</UserControl>
