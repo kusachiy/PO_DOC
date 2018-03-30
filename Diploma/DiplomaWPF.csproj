@@ -169,11 +169,6 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Properties\OldImport.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>OldImport.settings</DependentUpon>
-    </Compile>
     <Compile Include="Utils\DialogHelper.cs" />
     <Compile Include="Dialogs\Managers\DatabasePathManager.cs" />
     <Compile Include="Dialogs\Managers\SemesterSettingsManager.cs" />
@@ -334,10 +329,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Import.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Properties\OldImport.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>OldImport.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -366,6 +357,11 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database.accdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

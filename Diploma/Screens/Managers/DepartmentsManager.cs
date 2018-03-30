@@ -72,7 +72,7 @@ namespace Diploma.Screens.Managers
             var dialog = new DatabasePathDialog(manager);
             if(dialog.ShowDialog()==true)
             {
-                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);//restart
             }
             Application.Current.Shutdown();
         }

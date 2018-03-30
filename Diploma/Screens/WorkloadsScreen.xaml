@@ -19,17 +19,76 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox Header="Table">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Учебный год:" VerticalAlignment="Center" FontSize="18" FontWeight="DemiBold" Margin="10,5">                
+            </TextBlock>
+                <ComboBox
+                    Grid.Column="1"
+                        Margin="0,5,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        IsEditable="True"
+                        IsReadOnly="True"
+                        MinWidth="200"
+                        ItemsSource="{Binding StudyYears}"
+                        SelectedItem="{Binding SelectedStudyYear, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{DynamicResource VirtualisedMetroComboBox}"
+                         />           
+        </Grid>
+       
+        <GroupBox Header="Нагрузки" Grid.Row="1">
             <DataGrid
-                AutoGenerateColumns="True"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
                 IsReadOnly="True"
-                ItemsSource="{Binding Workloads}" />
+                ItemsSource="{Binding Workloads}"
+                SelectedItem="{Binding SelectedWorkload}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding LocalWorkload.DisciplineYear.Discipline.Name, Mode=OneWay}"
+                        Header="Дисциплина" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding LocalWorkload.Group.Name, Mode=OneWay}"
+                        Header="Группа" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding LocalWorkload.Semester.Number, Mode=OneWay}"
+                        Header="Семестр" />
+                    <DataGridTemplateColumn Width="2*" Header="Преподаватель">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox
+                                                    Margin="0,5,0,0"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Center"
+                                                    controls:TextBoxHelper.Watermark="Выберите исполнителя.."
+                                                    DisplayMemberPath="Name"
+                                                    IsEditable="True"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding DataContext.Employees, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    MaxDropDownHeight="125"
+                                                    SelectedItem="{Binding Employee, NotifyOnSourceUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                                    Style="{DynamicResource VirtualisedMetroComboBox}"
+                                                    Text="{Binding Employee.Name}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </GroupBox>
         <controls:Flyout
-            Grid.Row="1"
+            Grid.Row="2"
             Background="{DynamicResource HighlightBrush}"
             CloseButtonVisibility="Collapsed"
             IsOpen="True"

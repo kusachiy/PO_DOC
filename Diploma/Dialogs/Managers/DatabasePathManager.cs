@@ -1,4 +1,5 @@
 ﻿using Diploma.Controls.Managers;
+using Diploma.Properties;
 using Diploma.Screens.Managers;
 using GalaSoft.MvvmLight.Command;
 using MahApps.Metro.Controls.Dialogs;
@@ -21,13 +22,34 @@ namespace Diploma.Dialogs.Managers
         public DatabasePathManager()
         {
             Panel = new PanelManager
-            {                
+            {    
+                LeftButtons = new List<PanelButtonManager>
+                {
+                    new PanelButtonManager{OnButtonAction = o=> CreateNew(),Icon = PackIconModernKind.OfficeAccess,Text = "Создать новую"}
+                },
                 RightButtons = new List<PanelButtonManager>
                 {
                     new PanelButtonManager{OnButtonAction = o=> Save(),Icon = PackIconModernKind.Save,Text = "Save"}
                 }
             };    
             SelectFileCommand = new RelayCommand(SelectFile);
+        }
+
+        private void CreateNew()
+        {
+            try
+            {
+                if (!Directory.Exists(System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"Database")))
+                    Directory.CreateDirectory(System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"Database"));
+                File.WriteAllBytes(System.IO.Path.Combine(Directory.GetCurrentDirectory(), @"Database\database.accdb"), Resources.database);
+                MessageBox.Show("База данных успешно установлена");
+                OnExit();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удается создать файл из-за исключения: " + ex.Message);
+            }
         }
 
         private void SelectFile()

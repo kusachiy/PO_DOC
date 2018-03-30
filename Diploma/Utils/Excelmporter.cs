@@ -175,16 +175,16 @@ namespace Diploma.Utils
             Log = new List<string>();
             foreach (var dWorkload in _workloads)
             {
-                Employee employee = _service.GetLastWorkloadEmployee(dWorkload.DisciplineYear.Discipline, dWorkload.Group, _studyYear);
+                Guid? employeeId = _service.GetLastWorkloadEmployeeId(dWorkload.DisciplineYear.Discipline, dWorkload.Group, _studyYear);
                 Workload workload;
-                if (employee != null)
-                    workload = new Workload { Employee = employee, LocalWorkload = dWorkload };
+                if (employeeId != null)
+                    workload = new Workload { EmployeeId = employeeId, LocalWorkloadId = dWorkload.Id };
                 else
                 {
-                    workload = new Workload { LocalWorkload = dWorkload };
+                    workload = new Workload { LocalWorkloadId = dWorkload.Id };
                     Log.Add($"Не удалось установить нагрузку [{dWorkload.DisciplineYear.Discipline.Name}] по данным прошлых лет");
                 }
-                _service.AddOrUpdateWorkload(workload);
+                _service.AddWorkload(workload);
             }
         }
 

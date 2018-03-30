@@ -36,11 +36,13 @@ namespace Diploma.Services
         void DeleteDiscipline(Discipline selectedDiscipline);
         void AddOrUpdateStudyYear(StudyYear studyYear);
         void AddOrUpdateDisciplineWorkload(DisciplineWorkload workload);     
-        void AddOrUpdateWorkload(Workload workload);
-        Employee GetLastWorkloadEmployee(Discipline discipline, Group group, StudyYear studyYear);
+        void AddWorkload(Workload workload);
+        Guid? GetLastWorkloadEmployeeId(Discipline discipline, Group group, StudyYear studyYear);
         void AddOrUpdateDisciplineYear(DisciplineYear disYear);
         void DeleteSpecialPosition(SpecialPosition selectedPosition);
         List<SpecialPosition> GetAllSpecialPostitions();
         void AddOrUpdateSpecialPosition(SpecialPosition sp);
+        List<Workload> GetAllWorkloadsByYear(StudyYear selectedStudyYear);
+        void UpdateWorkload(Workload workload);
     }
 }

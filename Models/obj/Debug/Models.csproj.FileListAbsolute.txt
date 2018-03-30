@@ -1,7 +1,0 @@
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\bin\Debug\Models.dll.config
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\bin\Debug\Models.dll
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\bin\Debug\Models.pdb
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\obj\Debug\Models.csprojResolveAssemblyReference.cache
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\obj\Debug\Models.csproj.CoreCompileInputs.cache
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\obj\Debug\Models.dll
-C:\Users\Каркуша\Desktop\_projects\_study\Диплом\diploma\Models\obj\Debug\Models.pdb

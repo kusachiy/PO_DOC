@@ -193,23 +193,12 @@ namespace Diploma.Services
             }
         }
 
-        public void AddOrUpdateWorkload(Workload workload)
+        public void AddWorkload(Workload workload)
         {
             using (var scope = Db.BeginWork())
-            {
-                var localWorkload = workload.LocalWorkload;
-                if (localWorkload != null)
-                    workload.LocalWorkloadId = localWorkload.Id;
-                workload.LocalWorkload = null;
-
-                var employee = workload.Employee;
-                if (employee != null)
-                    workload.EmployeeId = employee?.Id;
-                workload.Employee = null;
-                _workloadRepository.AddOrUpdate(workload);
-                scope.SaveChanges();
-                workload.LocalWorkload = localWorkload;
-                workload.Employee = employee;
+            {               
+                _workloadRepository.Add(workload);
+                scope.SaveChanges();           
             }
         }
 
@@ -407,7 +396,7 @@ namespace Diploma.Services
         {
             using (Db.BeginReadOnlyWork())
             {
-                return _workloadRepository.GetAll();
+                return _workloadRepository.GetAll(w=>w.LocalWorkload.DisciplineYear.Discipline,w=>w.LocalWorkload.Group,w=>w.LocalWorkload.Semester,w=>w.Employee);
             }
         }    
 
@@ -421,7 +410,7 @@ namespace Diploma.Services
         #endregion
 
 
-        public Employee GetLastWorkloadEmployee(Discipline discipline, Group group, StudyYear studyYear)
+        public Guid? GetLastWorkloadEmployeeId(Discipline discipline, Group group, StudyYear studyYear)
         {
             using (Db.BeginReadOnlyWork())
             {
@@ -429,14 +418,32 @@ namespace Diploma.Services
                     return null;
                 var workload = _workloadRepository.Get(
                     w => w.LocalWorkload.DisciplineYearId == discipline.Id
-                    && w.LocalWorkload.GroupId == group.Id
+                    && w.LocalWorkload.Group.SpecialityId == group.SpecialityId
                     && w.LocalWorkload.StudyYear.Year == studyYear.Year - 1);
-                return workload?.Employee;
+                return workload?.Employee?.Id;
             }
         }
 
-        
+        public List<Workload> GetAllWorkloadsByYear(StudyYear selectedStudyYear)
+        {
+            using (Db.BeginReadOnlyWork())
+            {
+                return _workloadRepository.GetMany(w=>w.LocalWorkload.StudyYearId == selectedStudyYear.Id, w => w.LocalWorkload.DisciplineYear.Discipline, w => w.LocalWorkload.Group, w => w.LocalWorkload.Semester, w => w.Employee);
+            }
+        }
 
-        
+        public void UpdateWorkload(Workload workload)
+        {
+            using (var scope = Db.BeginWork())
+            {
+                if (workload.Employee == null)
+                    return;
+                var baseEntity = _workloadRepository.Get(w => w.Id == workload.Id);
+                baseEntity.EmployeeId = workload.Employee.Id;
+                _workloadRepository.Update(baseEntity);
+                scope.SaveChanges();
+            }
+        }
+   
     }
 }
