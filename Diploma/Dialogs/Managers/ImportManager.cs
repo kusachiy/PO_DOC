@@ -1,6 +1,6 @@
 ﻿using Diploma.Controls.Managers;
 using Diploma.Screens.Managers;
-using Diploma.Utils;
+using Diploma.Utils.ExcelHelpers;
 using GalaSoft.MvvmLight.Command;
 using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
@@ -29,6 +29,7 @@ namespace Diploma.Dialogs.Managers
 
         public ImportManager()
         {
+            Year = DateTime.Now.Year;
             _panelButtonManager = new PanelButtonManager { OnButtonAction = o => Import(), Icon = PackIconModernKind.OfficeExcel, Text = "Импорт" };
             _secondManager = new PanelButtonManager {OnButtonAction = o => Save(), Icon = PackIconModernKind.NavigateNext, Text = "Продолжить",ButtonVisibility=Visibility.Collapsed };
             Panel = new PanelManager

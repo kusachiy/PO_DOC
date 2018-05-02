@@ -54,7 +54,7 @@
                 SelectedItem="{Binding SelectedWorkload}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                        Width="2*"
+                        Width="4*"
                         Binding="{Binding LocalWorkload.DisciplineYear.Discipline.Name, Mode=OneWay}"
                         Header="Дисциплина" />
                     <DataGridTextColumn
@@ -62,10 +62,10 @@
                         Binding="{Binding LocalWorkload.Group.Name, Mode=OneWay}"
                         Header="Группа" />
                     <DataGridTextColumn
-                        Width="2*"
+                        Width="1*"
                         Binding="{Binding LocalWorkload.Semester.Number, Mode=OneWay}"
                         Header="Семестр" />
-                    <DataGridTemplateColumn Width="2*" Header="Преподаватель">
+                    <DataGridTemplateColumn Width="3*" Header="Преподаватель">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox

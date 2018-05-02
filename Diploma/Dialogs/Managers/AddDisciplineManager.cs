@@ -20,6 +20,7 @@ namespace Diploma.Dialogs.Managers
         public string Title { get; set; }
         private Discipline _discipline;
         public Discipline Discipline { get { return _discipline; } set { _discipline = value;RaisePropertyChanged(); } }
+        public string[] Types { get; set; }
 
           
         public ObservableCollection<Department> Departments { get; private set; }
@@ -45,7 +46,7 @@ namespace Diploma.Dialogs.Managers
                     new PanelButtonManager{OnButtonAction = o=> Save(),Icon = PackIconModernKind.Save,Text = "Save"}
                 }
             };
-           
+            Types = EnumExtender.GetAllDescriptions(typeof(SpecialDisciplineKind));
         }
 
         private void Save()

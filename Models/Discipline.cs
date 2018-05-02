@@ -9,17 +9,29 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Models
-{   
-    public enum DisciplineType
+{       
+    public enum SpecialDisciplineKind
     {
-        [Description("Простая")]
-        Simple,
-        [Description("Специальная по числу студентов")]
-        SpecialStudentCount,
-        [Description("Специальная по количеству недель")]
-        SpecialWeeks
+        [Description("Учебная практика")]
+        LearningPractine,
+        [Description("Производственная практика")]
+        ManufacturePractine,
+        [Description("Преддипломная практика")]
+        UndergraduatePractice,
+        [Description("НИИР")]
+        NIIR,
+        [Description("ГЭК")]
+        GEK,
+        [Description("ГАК")]
+        GAK,
+        [Description("Руководство магистрами")]
+        MAG_RUK,
+        [Description("Руководство бакалаврами")]
+        BAK_RUK,
+        [Description("Руководство аспирантами")]
+        ASP_RUK,
     }
-    
+
     public class Discipline : IEntity
     {
         public Guid Id { get; set; }
@@ -31,7 +43,21 @@ namespace Models
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; } // Могут быть конфликты из-за неправильной схемы данных.
         public bool IsSpecial { get; set; }
-        public string StringSpecial => IsSpecial?"Специальная":"Простая";      
+        public string StringSpecial => IsSpecial?"Специальная":"Простая"; 
+        public SpecialDisciplineKind? SpecialType { get; set; }
+        public string StringSpecialType => SpecialType?.ToDescriptionString() ?? "";
+        [NotMapped]
+        public int SpecialTypeSelector
+        {
+            get { return SpecialType == null ? -1 : (int)SpecialType; }
+            set
+            {
+                if (value == -1)
+                    SpecialType = null;
+                else
+                    SpecialType = (SpecialDisciplineKind)value;
+            }
+        }
 
         public Discipline()
         {
@@ -39,7 +65,7 @@ namespace Models
         }
         public override string ToString()
         {
-            return base.ToString();
+            return Name;
         }
     }
 }

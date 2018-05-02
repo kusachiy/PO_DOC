@@ -47,7 +47,9 @@ namespace Diploma
         private FacultiesManager _facultiesManager;
         private GroupsManager _groupsManager;
         private SpecialitiesManager _specialitiesManager;
+        private DisciplineWorkloadManager _disciplineWorkloadManager;
         private WorkloadManager _workloadManager;
+
 
         public RelayCommand ShowSemestersDialog { get; set; }
         public RelayCommand ImportCommand { get; set; }
@@ -68,6 +70,7 @@ namespace Diploma
             _facultiesManager = new FacultiesManager{ SetWaiting = status => Waiting = status };
             _groupsManager = new GroupsManager { SetWaiting = status => Waiting = status };
             _specialitiesManager = new SpecialitiesManager { SetWaiting = status => Waiting = status };
+            _disciplineWorkloadManager = new DisciplineWorkloadManager { SetWaiting = status => Waiting = status };
             _workloadManager = new WorkloadManager { SetWaiting = status => Waiting = status };
 
             ShowSemestersDialog = new RelayCommand(OpenSettings);
@@ -88,7 +91,9 @@ namespace Diploma
 
         private void Export()
         {
-            
+            var manager = new ExportManager { SetWaiting = status => Waiting = status };
+            var dialog = new ExportDialog(manager);
+            dialog.Show();
         }
 
         private void Import()
@@ -124,43 +129,49 @@ namespace Diploma
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.GradeD,
-                    Label = "Departments",
+                    Label = "Кафедры",
                     Screen = _departmentsManager
                 },
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.Puzzle,
-                    Label = "Disciplines",
+                    Label = "Дисциплины",
                     Screen = _disciplinesManager
                 },
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.FuturamaFry,
-                    Label = "Employees",
+                    Label = "Преподаватели",
                     Screen = _employeesManager
                 },
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.GradeF,
-                    Label = "Faculties",
+                    Label = "Факультеты",
                     Screen = _facultiesManager
                 },
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.Group,
-                    Label = "Groups",
+                    Label = "Группы",
                     Screen = _groupsManager
                 },
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.Tag,
-                    Label = "Specialities",
+                    Label = "Специальности",
                     Screen = _specialitiesManager
+                },
+                 new TabScreenManager
+                {
+                    Icon = MahApps.Metro.IconPacks.PackIconModernKind.BookPerspective,
+                    Label = "Нагрузки за семестр",
+                    Screen = _disciplineWorkloadManager
                 },
                 new TabScreenManager
                 {
                     Icon = MahApps.Metro.IconPacks.PackIconModernKind.Pin,
-                    Label = "Workloads",
+                    Label = "Назначение преподавателей",
                     Screen = _workloadManager
                 }
             };

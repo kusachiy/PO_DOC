@@ -3,6 +3,7 @@ using Diploma.Dialogs;
 using Diploma.Dialogs.Managers;
 using Diploma.Services;
 using Diploma.Utils;
+using GalaSoft.MvvmLight.Command;
 using MahApps.Metro.IconPacks;
 using Models;
 using System;
@@ -19,6 +20,9 @@ namespace Diploma.Screens.Managers
         private Discipline _selectedDiscipline;
         public Discipline SelectedDiscipline { get { return _selectedDiscipline; } set { _selectedDiscipline = value; RaisePropertyChanged(); } }
         public List<Discipline> Disciplines { get; set; }
+
+        public RelayCommand MouseDoubleClickCommand { get; set; }
+
         public DisciplinesManager()
         {
             Panel = new PanelManager
@@ -33,6 +37,7 @@ namespace Diploma.Screens.Managers
                     new PanelButtonManager{OnButtonAction = o=> Delete(),Icon = PackIconModernKind.Delete,Text = "Delete"},
                 }
             };
+            MouseDoubleClickCommand = new RelayCommand(Edit);
         }
         private void Add()
         {
@@ -75,7 +80,7 @@ namespace Diploma.Screens.Managers
         {
             SetWaiting(true);
             var service = Get<IGeneralService>();
-            Disciplines = service.GetAllDisciplines();
+            Disciplines = service.GetAllDisciplines().OrderBy(d => d.Name).OrderBy(d => d.IsSpecial).ToList();
             RaisePropertyChanged("Disciplines");
             SetWaiting(false);
         }

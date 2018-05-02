@@ -44,5 +44,12 @@ namespace Diploma.Services
         void AddOrUpdateSpecialPosition(SpecialPosition sp);
         List<Workload> GetAllWorkloadsByYear(StudyYear selectedStudyYear);
         void UpdateWorkload(Workload workload);
+        List<DisciplineWorkload> GetAllEmloyeeWorkloadsByYear(Employee employee, int year);
+        List<DisciplineWorkload> GetAllEmloyeeWorkloadsByYearAutumm(Employee employee, int year);
+        List<DisciplineWorkload> GetAllEmloyeeWorkloadsByYearSpring(Employee employee, int year);
+        List<DisciplineWorkload> GetAllDisciplineWorkloadsByYearAndSemesterType(int year, SemesterType semester);
+        List<DisciplineWorkload> GetAllDisciplineWorkloadsByYear(StudyYear year);
+        List<Workload> GetAllWorkloadsByLocalWorkload(Guid id);
+        List<DisciplineWorkload> GetAllDisciplineWorkloadsByYearAndSemester(StudyYear selectedStudyYear, Semester selectedSemester);
     }
 }

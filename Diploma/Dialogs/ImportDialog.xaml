@@ -49,8 +49,10 @@
             <GroupBox Header="Учебный год">
                 <TextBox
                     Grid.Column="0"
-                    Margin="15,2"
+                    Height="31"
+                    Margin="15,2,15,0"
                     HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
                     controls:TextBoxHelper.Watermark="Укажите год... "
                     Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}" />
             </GroupBox>

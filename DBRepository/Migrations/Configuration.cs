@@ -25,9 +25,9 @@ namespace DBRepository.Migrations
                 new Employee { Name = "Биллиг В.А." },
                 new Employee { Name = "Мальков А.А." },
                 new Employee { Name = "Прохныч А.Н." },
-                new Employee { Name = "Артёмов И.Ю." },
+                new Employee { Name = "Артемов И.Ю." },
                 new Employee { Name = "Котлинский С.В." },
-                new Employee { Name = "Югов И.Ю." });
+                new Employee { Name = "Югов И.О." });
 
             context.Semesters.AddOrUpdate(p => p.Number,
                     new Semester { Number = 1, CountOfWeeks = 17 },

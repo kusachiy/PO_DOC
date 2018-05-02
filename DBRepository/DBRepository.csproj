@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201803291025529_SpecPos.Designer.cs">
       <DependentUpon>201803291025529_SpecPos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804031212041_SpecialType.cs" />
+    <Compile Include="Migrations\201804031212041_SpecialType.Designer.cs">
+      <DependentUpon>201804031212041_SpecialType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\DisciplineYearRepository.cs" />
     <Compile Include="Repositories\DisciplineWorkloadRepository.cs" />
     <Compile Include="Repositories\FacultyRepository.cs" />
@@ -125,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803291025529_SpecPos.resx">
       <DependentUpon>201803291025529_SpecPos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804031212041_SpecialType.resx">
+      <DependentUpon>201804031212041_SpecialType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

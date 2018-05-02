@@ -24,5 +24,6 @@ namespace Diploma.Screens
         {
             InitializeComponent();
         }
+
     }
 }

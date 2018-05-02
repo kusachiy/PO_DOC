@@ -53,7 +53,9 @@ namespace Models
             Id = Guid.NewGuid();
             Students = new List<Student>();
         }
-       
-            
+        public override string ToString()
+        {
+            return Name;
+        }        
     }
 }

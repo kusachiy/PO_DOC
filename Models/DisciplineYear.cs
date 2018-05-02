@@ -20,6 +20,14 @@ namespace Models
         public int CountOfLecture { get; set; }
         public int CountOfPractice { get; set; }
         public int CountOfLabs { get; set; }
+        public int TotalLessons => CountOfLabs + CountOfLecture + CountOfPractice;
+
+        public int CountOfLearnigPracticeWeeks => Discipline?.SpecialType == SpecialDisciplineKind.LearningPractine ? TotalLessons : 0;
+        public int CountOfManufacturePracticeWeeks => Discipline?.SpecialType == SpecialDisciplineKind.ManufacturePractine ? TotalLessons : 0;
+        public int CountOfUndergraduatePracticeWeeks => Discipline?.SpecialType == SpecialDisciplineKind.UndergraduatePractice ? TotalLessons : 0;
+        public int CountOfNIIR => Discipline?.SpecialType == SpecialDisciplineKind.NIIR ? TotalLessons : 0;
+
+
 
         public bool HasKZ { get; set; }
         public bool HasKR { get; set; }
@@ -33,6 +41,10 @@ namespace Models
         public DisciplineYear()
         {
             Id = Guid.NewGuid();
+        }
+        public override string ToString()
+        {
+            return $"{Discipline.Name}";
         }
     }
 }

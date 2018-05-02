@@ -53,6 +53,11 @@
                         Header="Тип специльных расчётов"
                         Visibility="{Binding Path=IsSpecial, Converter={StaticResource btv}}" />
                 </DataGrid.Columns>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <command:EventToCommand Command="{Binding MouseDoubleClickCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </DataGrid>
         </GroupBox>
         <controls:Flyout

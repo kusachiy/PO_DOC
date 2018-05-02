@@ -72,7 +72,7 @@
                         FontSize="14"
                         Text="{Binding Source={x:Static properties:Import.Default}, Path=StartRow, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />
@@ -112,7 +112,7 @@
                         FontSize="14"
                         Text="{Binding Source={x:Static properties:Import.Default}, Path=Semester, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="7">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />
@@ -123,16 +123,16 @@
                         VerticalAlignment="Center"
                         FontSize="14"
                         FontWeight="Bold"
-                        Text="Кол-во недель:" />
+                        Text="Кафедра:" />
                     <TextBox
                         Grid.Column="1"
                         Margin="5"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         FontSize="14"
-                        Text="{Binding Source={x:Static properties:Import.Default}, Path=Weeks, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding Source={x:Static properties:Import.Default}, Path=Department, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Grid Grid.Row="2" Grid.Column="1">
+                <Grid Grid.Row="1" Grid.Column="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />
@@ -152,7 +152,7 @@
                         FontSize="14"
                         Text="{Binding Source={x:Static properties:Import.Default}, Path=Discipline, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />
@@ -172,7 +172,7 @@
                         FontSize="14"
                         Text="{Binding Source={x:Static properties:Import.Default}, Path=Lectures, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Grid Grid.Row="3" Grid.Column="1">
+                <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />
@@ -312,7 +312,7 @@
                         FontSize="14"
                         Text="{Binding Source={x:Static properties:Import.Default}, Path=ZACH, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Grid Grid.Row="7" Grid.ColumnSpan="2">
+                <Grid Grid.Row="7" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />

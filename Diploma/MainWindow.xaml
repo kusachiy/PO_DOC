@@ -36,6 +36,9 @@
         <DataTemplate DataType="{x:Type managers:SpecialitiesManager}">
             <screens:SpecialitiesScreen />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type managers:DisciplineWorkloadManager}">
+            <screens:DisciplineWorkloadsScreen />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type managers:WorkloadManager}">
             <screens:WorkloadsScreen />
         </DataTemplate>
@@ -93,37 +96,36 @@
                 Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                 Foreground="White"
                 Header="Данные">
-                <MenuItem                  
+                <MenuItem
                     Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                     Command="{Binding ImportCommand}"
-                    Foreground="White"                  
-                    Icon="{iconPacks:Entypo Kind=ArrowLeft}"
-                    Header="Импорт">
-                </MenuItem>
+                    Foreground="White"
+                    Header="Импорт"
+                    Icon="{iconPacks:Entypo Kind=ArrowLeft}" />
                 <MenuItem
                     Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                     Command="{Binding ExportCommand}"
                     Foreground="White"
-                    Icon="{iconPacks:Entypo Kind=ArrowRight}"                   
-                    Header="Экспорт" />
-                <MenuItem                    
+                    Header="Экспорт"
+                    Icon="{iconPacks:Entypo Kind=ArrowRight}" />
+                <MenuItem
                     Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                     Command="{Binding ShowSemestersDialog}"
                     Foreground="White"
-                    Icon="{iconPacks:Entypo Kind=Calendar}"  
-                    Header="Длительность семестров" />
-                <MenuItem                    
+                    Header="Длительность семестров"
+                    Icon="{iconPacks:Entypo Kind=Calendar}" />
+                <MenuItem
                     Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                     Command="{Binding ShowSpecialPositionsDialog}"
                     Foreground="White"
-                    Icon="{iconPacks:Material Kind=AccountBox}"  
-                    Header="Специальные должности" />
+                    Header="Специальные должности"
+                    Icon="{iconPacks:Material Kind=AccountBox}" />
             </MenuItem>
 
             <MenuItem
                 Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                 Foreground="White"
-                Header="Настройки">                
+                Header="Настройки">
                 <MenuItem
                     Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                     Command="{Binding ImportSettingsCommand}"

@@ -60,11 +60,17 @@ namespace Models
         public int ContractNumber { get; set; }
         public DateTime BirthDay { get; set; }
         public List<SpecialPosition> SpecialPositions { get; set; }
+        public List<Workload> Workloads { get; set; }
 
         public Employee()
         {
             Id = Guid.NewGuid();
             SpecialPositions = new List<SpecialPosition>();
+            Workloads = new List<Workload>();
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

@@ -23,11 +23,9 @@ namespace Models
         public Guid StudyYearId { get; set; }
         [ForeignKey("StudyYearId")]
         public StudyYear StudyYear { get; set; }
-
         public DisciplineWorkload()
         {
             Id = Guid.NewGuid();
-        }
-        //_____________________________________
+        }   
     }
 }
