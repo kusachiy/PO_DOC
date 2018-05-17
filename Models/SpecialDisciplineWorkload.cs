@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class DisciplineWorkload : IEntity
+    public class SpecialDisciplineWorkload : IEntity
     {
         public Guid Id { get; set; }
         public Guid DisciplineYearId { get; set; }
         [ForeignKey("DisciplineYearId")]
-        public DisciplineYear DisciplineYear { get; set; }
+        public SpecialDisciplineYear DisciplineYear { get; set; }
         public Guid GroupId { get; set; }
         [ForeignKey("GroupId")]
         public Group Group { get; set; }            
@@ -24,16 +24,10 @@ namespace Models
         [ForeignKey("StudyYearId")]
         public StudyYear StudyYear { get; set; }
 
-        public string DisciplineWithSemesterString => $"{Semester.Number}. {DisciplineYear.Discipline.Name}";
-
-        public DisciplineWorkload()
+        public SpecialDisciplineWorkload()
         {
             Id = Guid.NewGuid();
         }
-
-        public override string ToString()
-        {
-            return DisciplineYear.Discipline.Name;
-        }
+        //_____________________________________
     }
 }

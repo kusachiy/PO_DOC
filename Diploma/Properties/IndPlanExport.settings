@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Diploma.Properties" GeneratedClassName="IndPlanExport">
+  <Profiles />
+  <Settings>
+    <Setting Name="DisciplinesStartRow" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="YearsDescriptionRowCell" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">26, 6</Value>
+    </Setting>
+    <Setting Name="TeacherFIORowCell" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">29, 8</Value>
+    </Setting>
+    <Setting Name="DisciplineNameColumn" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="DisciplineDescrColumn" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="StudentsCountColumn" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="DisciplineSettingsStartColumn" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -92,28 +92,6 @@ namespace Diploma.Services
             }
         }
 
-        public void AddOrUpdateWorkload(Workload workload)
-        {
-            using (var scope = Db.BeginWork())
-            {
-                var disciplineWorkload = workload.LocalWorkload;
-                if (disciplineWorkload != null)
-                    workload.LocalWorkloadId = disciplineWorkload.Id;
-                workload.LocalWorkload = null;
-
-                var employee = workload.Employee;
-                if (employee != null)
-                    workload.EmployeeId = employee.Id;
-                workload.Employee = null;                              
-
-                _workloadRepository.AddOrUpdate(workload);
-                scope.SaveChanges();
-
-                workload.Employee = employee;
-                workload.LocalWorkload = disciplineWorkload;            
-            }
-        }
-
         public void AddOrUpdateDepartment(Department dep)
         {
             using (var scope = Db.BeginWork())
@@ -274,6 +252,11 @@ namespace Diploma.Services
             using (var scope = Db.BeginWork())
             {               
                 var baseEmp = _employeeRepository.Get(u => u.Id == emp.Id);
+                var workloads = GetAllEmloyeeWorkloads(baseEmp);
+                foreach (var w in workloads)
+                {
+                    w.EmployeeId = null;
+                }
                 if (baseEmp != null)
                 {
                     var workloads = GetAllEmloyeeWorkloads(baseEmp);
@@ -332,18 +315,6 @@ namespace Diploma.Services
                 if (baseEntity != null)
                 {
                     _specialPositionRepository.Delete(baseEntity);
-                    scope.SaveChanges();
-                }
-            }
-        }
-        public void DeleteWorkload(Workload workload)
-        {
-            using (var scope = Db.BeginWork())
-            {
-                var baseEntity = _workloadRepository.Get(u => u.Id == workload.Id);
-                if (baseEntity != null)
-                {
-                    _workloadRepository.Delete(baseEntity);
                     scope.SaveChanges();
                 }
             }
@@ -483,10 +454,17 @@ namespace Diploma.Services
         {
             using (Db.BeginReadOnlyWork())
             {
+<<<<<<< working copy
+                return _workloadRepository.GetMany(w => w.EmployeeId == employee.Id).ToList();//выборка
+            }
+        }
+=======
                 return _workloadRepository.GetMany(w => w.EmployeeId == employee.Id);//фильтр
                    //выборка
             }
         }
+
+>>>>>>> merge rev
         public List<DisciplineWorkload> GetAllEmloyeeWorkloadsByYear(Employee employee, int year)
         {
             using (Db.BeginReadOnlyWork())
@@ -549,7 +527,5 @@ namespace Diploma.Services
                     w => w.Group, w => w.DisciplineYear, w => w.DisciplineYear.Discipline).ToList();
             }
         }
-
-        
     }
 }

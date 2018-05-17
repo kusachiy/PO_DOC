@@ -1,4 +1,6 @@
 ﻿using Diploma.Controls.Managers;
+using Diploma.Dialogs;
+using Diploma.Dialogs.Managers;
 using Diploma.Services;
 using Diploma.Utils;
 using MahApps.Metro.IconPacks;
@@ -16,7 +18,7 @@ namespace Diploma.Screens.Managers
     {
         public List<Workload> Workloads { get; set; }
         private Workload _selectedWorkload;
-        public Workload Selectedworkload { get { return _selectedWorkload; } set { _selectedWorkload = value; RaisePropertyChanged(); } }
+        public Workload SelectedWorkload { get { return _selectedWorkload; } set { _selectedWorkload = value; RaisePropertyChanged(); } }
         private StudyYear _selectedStudyYear;
         public StudyYear SelectedStudyYear
         {
@@ -38,6 +40,11 @@ namespace Diploma.Screens.Managers
         {
             Panel = new PanelManager
             {
+                LeftButtons = new List<PanelButtonManager>
+                {
+                    new PanelButtonManager{OnButtonAction = o=>AddNewWorkloadHandler(),Icon = PackIconModernKind.Add,Text = "Добавить нагрузку" },
+                    new PanelButtonManager{OnButtonAction = o=>RemoveWorkloadHandler(), Icon = PackIconModernKind.Delete,Text = "Удалить"}
+                },
                 MiddleButtons = new List<PanelButtonManager>
                 {
                     new PanelButtonManager{OnButtonAction = o=> Refresh(),Icon = PackIconModernKind.Refresh,Text = "Refresh"}
@@ -50,21 +57,49 @@ namespace Diploma.Screens.Managers
             };
         }
 
+        private async void RemoveWorkloadHandler()
+        {
+            if (SelectedWorkload == null)
+                return;            
+            SetWaiting(true);
+            await Task.Run(() => Delete(SelectedWorkload));
+            await DialogHelper.ShowMessageDialog("Удалено", "");
+            RefreshTable();
+            SetWaiting(false);
+        }       
+
+        private void AddNewWorkloadHandler()
+        {
+            SetWaiting(true);
+            var manager = new AddWorkloadManager(_selectedStudyYear) { SetWaiting = isBusy => SetWaiting(isBusy) };
+            var dialog = new AddWorkloadScreen(manager);
+            dialog.Closed += (sender, args) =>
+            {
+                RefreshTable();
+            };
+            dialog.Show();
+        }
+
         private async void SaveHandler()
         {
             SetWaiting(true);
-            await Task.Run(()=>Save());
-            await DialogHelper.ShowMessageDialog("Сохранено","");
+            await Task.Run(() => Save());
+            await DialogHelper.ShowMessageDialog("Сохранено", "");
             SetWaiting(false);
         }
 
         private void Save()
-        {            
+        {
             var service = Get<IGeneralService>();
             foreach (var workload in Workloads)
             {
                 service.UpdateWorkload(workload);
             };
+        }
+        private void Delete(Workload workload)
+        {
+            var service = Get<IGeneralService>();
+            service.DeleteWorkload(workload);
         }
 
         public override async void Refresh()

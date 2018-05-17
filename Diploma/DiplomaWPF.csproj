@@ -132,6 +132,9 @@
     <Compile Include="Controls\Managers\PanelManager.cs" />
     <Compile Include="Controls\Panel.xaml.cs" />
     <Compile Include="Controls\PanelButton.xaml.cs" />
+    <Compile Include="Dialogs\AddWorkloadScreen.xaml.cs">
+      <DependentUpon>AddWorkloadScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\AddDisciplineScreen.xaml.cs">
       <DependentUpon>AddDisciplineScreen.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,7 @@
     <Compile Include="Dialogs\ImportDialog.xaml.cs">
       <DependentUpon>ImportDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\Managers\AddWorkloadManager.cs" />
     <Compile Include="Dialogs\Managers\AddDisciplineManager.cs" />
     <Compile Include="Dialogs\Managers\AddSpecialityManager.cs" />
     <Compile Include="Dialogs\Managers\AddGroupManager.cs" />
@@ -172,6 +176,11 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>CalculationSettings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\OldImport.Designer.cs">
+      <DependentUpon>OldImport.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Properties\SemesterExport.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -238,12 +247,19 @@
     <Compile Include="Utils\ExcelHelpers\ExcelExporter.cs" />
     <Compile Include="Utils\ExcelHelpers\ExcelExtender.cs" />
     <Compile Include="Utils\ExcelHelpers\Excelmporter.cs" />
+    <Compile Include="Utils\ExcelHelpers\IImorter.cs" />
+    <Compile Include="Utils\ExcelHelpers\OldExcelImporter.cs" />
+    <Compile Include="Utils\UtilityModels\NormalizedWorkload.cs" />
     <Compile Include="Utils\WorkloadsCalculator.cs" />
     <Page Include="Controls\Panel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PanelButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\AddWorkloadScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -361,6 +377,10 @@
     <None Include="Properties\CalculationSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>CalculationSettings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\OldImport.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>OldImport.Designer.cs</LastGenOutput>
     </None>
     <None Include="Properties\SemesterExport.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

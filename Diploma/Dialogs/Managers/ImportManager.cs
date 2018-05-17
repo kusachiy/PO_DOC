@@ -20,10 +20,11 @@ namespace Diploma.Dialogs.Managers
         public string[] Paths { get; set; }
         public string Files => Paths==null? "": $"Добавлено {Paths.Length} файлов.";
         public string Log { get; set; }
+        public bool NewInputFormat { get; set; } = true;
 
         public int Year { get; set; }
         public RelayCommand SelectFileCommand { get; set; }
-        private Excelmporter _excelmporter;
+        private IImorter _excelmporter;
         private PanelButtonManager _panelButtonManager;
         private PanelButtonManager _secondManager;       
 
@@ -44,15 +45,23 @@ namespace Diploma.Dialogs.Managers
 
         private async void Import()
         {
-            if (Paths == default(string[])||Paths.Length ==0)
+            if (NewInputFormat)
+                await NewImport();
+            else
+                await OldImport();
+        }
+
+        private async Task NewImport()
+        {
+            if (Paths == default(string[]) || Paths.Length == 0)
                 return;
             Waiting = true;
             _excelmporter = new Excelmporter();
             bool isSuccess = true;
             foreach (var file in Paths)
             {
-                isSuccess = await Task.Run(() => _excelmporter.ImportDataFromExcel(file, Year))&&isSuccess;
-            }           
+                isSuccess = await Task.Run(() => _excelmporter.ImportDataFromExcel(file, Year)) && isSuccess;
+            }
             Log = "";
             foreach (var str in _excelmporter.Log)
             {
@@ -75,7 +84,42 @@ namespace Diploma.Dialogs.Managers
             _secondManager.ButtonVisibility = Visibility.Visible;
             _panelButtonManager.ButtonVisibility = Visibility.Collapsed;
             _panelButtonManager.RaisePropertyChanged("Panel");
-            RaisePropertyChanged("Log");     
+            RaisePropertyChanged("Log");
+            Waiting = false;
+        }
+
+        private async Task OldImport()
+        {
+            if (Paths == default(string[]) || Paths.Length == 0)
+                return;
+            Waiting = true;
+            _excelmporter = new OldExcelImporter();
+            bool isSuccess = true;
+            var file = Paths[0];           
+            isSuccess = await Task.Run(() => _excelmporter.ImportDataFromExcel(file, Year));           
+            Log = "";
+            foreach (var str in _excelmporter.Log)
+            {
+                Log += $"{str}\r\n";
+            }
+            if (_excelmporter.Log.Count != 0)
+            {
+                if (isSuccess)
+                    MessageBox.Show("В данных обнаружены неизвестные элементы. Замечания полученные в ходе импорта данных приведены в логе. В случае продолжения работы недостающие данные будут автоматически созданы и добалены. Убедитесь в правильности исходных данных...");
+                else
+                {
+                    MessageBox.Show("Фатальная ошибка");
+                    Waiting = false;
+                    RaisePropertyChanged("Log");
+                    return;
+                }
+            }
+            else
+                MessageBox.Show("Данные успешно считаны. Нажмите 'Продолжить', чтобы занести их в базу");
+            _secondManager.ButtonVisibility = Visibility.Visible;
+            _panelButtonManager.ButtonVisibility = Visibility.Collapsed;
+            _panelButtonManager.RaisePropertyChanged("Panel");
+            RaisePropertyChanged("Log");
             Waiting = false;
         }
 

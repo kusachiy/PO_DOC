@@ -39,6 +39,7 @@ namespace Diploma.Services
         void AddWorkload(Workload workload);
         Guid? GetLastWorkloadEmployeeId(Discipline discipline, Group group, StudyYear studyYear);
         void AddOrUpdateDisciplineYear(DisciplineYear disYear);
+        void AddOrUpdateWorkload(Workload workload);
         void DeleteSpecialPosition(SpecialPosition selectedPosition);
         List<SpecialPosition> GetAllSpecialPostitions();
         void AddOrUpdateSpecialPosition(SpecialPosition sp);
@@ -50,6 +51,7 @@ namespace Diploma.Services
         List<DisciplineWorkload> GetAllDisciplineWorkloadsByYearAndSemesterType(int year, SemesterType semester);
         List<DisciplineWorkload> GetAllDisciplineWorkloadsByYear(StudyYear year);
         List<Workload> GetAllWorkloadsByLocalWorkload(Guid id);
+        void DeleteWorkload(Workload workload);
         List<DisciplineWorkload> GetAllDisciplineWorkloadsByYearAndSemester(StudyYear selectedStudyYear, Semester selectedSemester);
     }
 }

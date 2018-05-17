@@ -52,6 +52,7 @@ namespace Models
         {
             Id = Guid.NewGuid();
             Students = new List<Student>();
+            CountOfStudents = 13;
         }
         public override string ToString()
         {

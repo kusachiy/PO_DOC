@@ -13,9 +13,9 @@ namespace Models
     public enum SpecialDisciplineKind
     {
         [Description("Учебная практика")]
-        LearningPractine,
+        LearningPractice,
         [Description("Производственная практика")]
-        ManufacturePractine,
+        ManufacturePractice,
         [Description("Преддипломная практика")]
         UndergraduatePractice,
         [Description("НИИР")]
@@ -30,6 +30,12 @@ namespace Models
         BAK_RUK,
         [Description("Руководство аспирантами")]
         ASP_RUK,
+        [Description("Рецензирование магистранстких работ")]
+        MAG_RETZ,
+        [Description("Рецензирование аспирантских работ")]
+        ASP_RETZ,
+        [Description("Руководство кафедрой")]
+        RUK_KAF,
     }
 
     public class Discipline : IEntity

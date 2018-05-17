@@ -44,6 +44,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
             <GroupBox Header="Учебный год">
@@ -75,6 +76,17 @@
                         Command="{Binding SelectFileCommand}"
                         Content="Обзор" />
                 </Grid>
+            </GroupBox>
+            <GroupBox Header="Формат входных файлов" Grid.Column="2">
+                <controls:ToggleSwitch
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"               
+                    IsChecked="{Binding NewInputFormat, UpdateSourceTrigger=PropertyChanged}"
+                    OffLabel="Старый"
+                    OnLabel="Новый" />
             </GroupBox>
         </Grid>
         <GroupBox Grid.Row="1" Header="Лог импорта">

@@ -19,32 +19,35 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Учебный год:" VerticalAlignment="Center" FontSize="18" FontWeight="DemiBold" Margin="10,5">                
-            </TextBlock>
-                <ComboBox
-                    Grid.Column="1"
-                        Margin="0,5,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        IsEditable="True"
-                        IsReadOnly="True"
-                        MinWidth="200"
-                        ItemsSource="{Binding StudyYears}"
-                        SelectedItem="{Binding SelectedStudyYear, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{DynamicResource VirtualisedMetroComboBox}"
-                         />           
+            <TextBlock
+                Margin="10,5"
+                VerticalAlignment="Center"
+                FontSize="18"
+                FontWeight="DemiBold"
+                Text="Учебный год:" />
+            <ComboBox
+                Grid.Column="1"
+                MinWidth="200"
+                Margin="0,5,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                IsEditable="True"
+                IsReadOnly="True"
+                ItemsSource="{Binding StudyYears}"
+                SelectedItem="{Binding SelectedStudyYear, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                Style="{DynamicResource VirtualisedMetroComboBox}" />
         </Grid>
-       
-        <GroupBox Header="Нагрузки" Grid.Row="1">
+
+        <GroupBox Grid.Row="1" Header="Нагрузки">
             <DataGrid
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
@@ -69,18 +72,18 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox
-                                                    Margin="0,5,0,0"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Center"
-                                                    controls:TextBoxHelper.Watermark="Выберите исполнителя.."
-                                                    DisplayMemberPath="Name"
-                                                    IsEditable="True"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding DataContext.Employees, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                    MaxDropDownHeight="125"
-                                                    SelectedItem="{Binding Employee, NotifyOnSourceUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
-                                                    Style="{DynamicResource VirtualisedMetroComboBox}"
-                                                    Text="{Binding Employee.Name}" />
+                                    Margin="0,5,0,0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    controls:TextBoxHelper.Watermark="Выберите исполнителя.."
+                                    DisplayMemberPath="Name"
+                                    IsEditable="True"
+                                    IsReadOnly="True"
+                                    ItemsSource="{Binding DataContext.Employees, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    MaxDropDownHeight="125"
+                                    SelectedItem="{Binding Employee, NotifyOnSourceUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                                    Style="{DynamicResource VirtualisedMetroComboBox}"
+                                    Text="{Binding Employee.Name}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
