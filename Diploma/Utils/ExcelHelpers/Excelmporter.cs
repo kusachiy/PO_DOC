@@ -95,8 +95,8 @@ namespace Diploma.Utils.ExcelHelpers
                     discipline = _newDisciplines.FirstOrDefault(d => d.Name == disciplineName);
                     if (discipline == null)
                     {
-
-                        discipline = new Discipline { Department = _defaultDepartment, Name = disciplineName, IsSpecial = !(kr || kp || ekz || zach) };
+                        bool hasWeeks = lectures + labs + practices == 0;
+                        discipline = new Discipline { Department = _defaultDepartment, Name = disciplineName, IsSpecial = !(kr || kp || ekz || zach || !hasWeeks) };
                         _newDisciplines.Add(discipline);
                         Log.Add($"Неизвестная дисциплина:'[{discipline.Name}]'");
                     }
