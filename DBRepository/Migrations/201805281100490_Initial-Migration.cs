@@ -3,7 +3,7 @@ namespace DBRepository.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class InitialMigration : DbMigration
     {
         public override void Up()
         {
@@ -24,8 +24,9 @@ namespace DBRepository.Migrations
                         Id = c.Guid(nullable: false),
                         Name = c.String(unicode: false),
                         DepartmentId = c.Guid(nullable: false),
-                        IsSpecial = c.Boolean(nullable: false),
+                        TypeOfDiscipline = c.Int(nullable: false),
                         SpecialType = c.Int(),
+                        PracticeType = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Departments", t => t.DepartmentId, cascadeDelete: true)
@@ -68,14 +69,52 @@ namespace DBRepository.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Faculties",
+                "dbo.SpecialPositions",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        ShortName = c.String(unicode: false),
-                        FullName = c.String(unicode: false),
+                        Name = c.String(unicode: false),
+                        ExecutorId = c.Guid(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Employees", t => t.ExecutorId, cascadeDelete: true)
+                .Index(t => t.ExecutorId);
+            
+            CreateTable(
+                "dbo.Workloads",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        LocalWorkloadId = c.Guid(nullable: false),
+                        EmployeeId = c.Guid(),
+                        CountOfStudents = c.Int(nullable: false),
+                        CountOfWeeks = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Employees", t => t.EmployeeId)
+                .ForeignKey("dbo.DisciplineWorkloads", t => t.LocalWorkloadId, cascadeDelete: true)
+                .Index(t => t.LocalWorkloadId)
+                .Index(t => t.EmployeeId);
+            
+            CreateTable(
+                "dbo.DisciplineWorkloads",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        DisciplineYearId = c.Guid(nullable: false),
+                        GroupId = c.Guid(),
+                        SemesterId = c.Guid(),
+                        StudyYearId = c.Guid(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.DisciplineYears", t => t.DisciplineYearId, cascadeDelete: true)
+                .ForeignKey("dbo.Groups", t => t.GroupId)
+                .ForeignKey("dbo.Semesters", t => t.SemesterId)
+                .ForeignKey("dbo.StudyYears", t => t.StudyYearId, cascadeDelete: true)
+                .Index(t => t.DisciplineYearId)
+                .Index(t => t.GroupId)
+                .Index(t => t.SemesterId)
+                .Index(t => t.StudyYearId);
             
             CreateTable(
                 "dbo.Groups",
@@ -106,6 +145,16 @@ namespace DBRepository.Migrations
                 .Index(t => t.FacultyId);
             
             CreateTable(
+                "dbo.Faculties",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        ShortName = c.String(unicode: false),
+                        FullName = c.String(unicode: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.Students",
                 c => new
                     {
@@ -116,26 +165,6 @@ namespace DBRepository.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Groups", t => t.GroupId)
                 .Index(t => t.GroupId);
-            
-            CreateTable(
-                "dbo.DisciplineWorkloads",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        DisciplineYearId = c.Guid(nullable: false),
-                        GroupId = c.Guid(nullable: false),
-                        SemesterId = c.Guid(nullable: false),
-                        StudyYearId = c.Guid(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.DisciplineYears", t => t.DisciplineYearId, cascadeDelete: true)
-                .ForeignKey("dbo.Groups", t => t.GroupId, cascadeDelete: true)
-                .ForeignKey("dbo.Semesters", t => t.SemesterId, cascadeDelete: true)
-                .ForeignKey("dbo.StudyYears", t => t.StudyYearId, cascadeDelete: true)
-                .Index(t => t.DisciplineYearId)
-                .Index(t => t.GroupId)
-                .Index(t => t.SemesterId)
-                .Index(t => t.StudyYearId);
             
             CreateTable(
                 "dbo.Semesters",
@@ -156,56 +185,43 @@ namespace DBRepository.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            CreateTable(
-                "dbo.Workloads",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        LocalWorkloadId = c.Guid(nullable: false),
-                        EmployeeId = c.Guid(),
-                        CountOfStudents = c.Int(nullable: false),
-                        CountOfWeeks = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Employees", t => t.EmployeeId)
-                .ForeignKey("dbo.DisciplineWorkloads", t => t.LocalWorkloadId, cascadeDelete: true)
-                .Index(t => t.LocalWorkloadId)
-                .Index(t => t.EmployeeId);
-            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.Workloads", "LocalWorkloadId", "dbo.DisciplineWorkloads");
-            DropForeignKey("dbo.Workloads", "EmployeeId", "dbo.Employees");
             DropForeignKey("dbo.DisciplineWorkloads", "StudyYearId", "dbo.StudyYears");
             DropForeignKey("dbo.DisciplineWorkloads", "SemesterId", "dbo.Semesters");
             DropForeignKey("dbo.DisciplineWorkloads", "GroupId", "dbo.Groups");
-            DropForeignKey("dbo.DisciplineWorkloads", "DisciplineYearId", "dbo.DisciplineYears");
             DropForeignKey("dbo.Students", "GroupId", "dbo.Groups");
             DropForeignKey("dbo.Groups", "SpecialityId", "dbo.Specialities");
             DropForeignKey("dbo.Specialities", "FacultyId", "dbo.Faculties");
+            DropForeignKey("dbo.DisciplineWorkloads", "DisciplineYearId", "dbo.DisciplineYears");
+            DropForeignKey("dbo.Workloads", "EmployeeId", "dbo.Employees");
+            DropForeignKey("dbo.SpecialPositions", "ExecutorId", "dbo.Employees");
             DropForeignKey("dbo.DisciplineYears", "DisciplineId", "dbo.Disciplines");
             DropForeignKey("dbo.Disciplines", "DepartmentId", "dbo.Departments");
-            DropIndex("dbo.Workloads", new[] { "EmployeeId" });
-            DropIndex("dbo.Workloads", new[] { "LocalWorkloadId" });
+            DropIndex("dbo.Students", new[] { "GroupId" });
+            DropIndex("dbo.Specialities", new[] { "FacultyId" });
+            DropIndex("dbo.Groups", new[] { "SpecialityId" });
             DropIndex("dbo.DisciplineWorkloads", new[] { "StudyYearId" });
             DropIndex("dbo.DisciplineWorkloads", new[] { "SemesterId" });
             DropIndex("dbo.DisciplineWorkloads", new[] { "GroupId" });
             DropIndex("dbo.DisciplineWorkloads", new[] { "DisciplineYearId" });
-            DropIndex("dbo.Students", new[] { "GroupId" });
-            DropIndex("dbo.Specialities", new[] { "FacultyId" });
-            DropIndex("dbo.Groups", new[] { "SpecialityId" });
+            DropIndex("dbo.Workloads", new[] { "EmployeeId" });
+            DropIndex("dbo.Workloads", new[] { "LocalWorkloadId" });
+            DropIndex("dbo.SpecialPositions", new[] { "ExecutorId" });
             DropIndex("dbo.DisciplineYears", new[] { "DisciplineId" });
             DropIndex("dbo.Disciplines", new[] { "DepartmentId" });
-            DropTable("dbo.Workloads");
             DropTable("dbo.StudyYears");
             DropTable("dbo.Semesters");
-            DropTable("dbo.DisciplineWorkloads");
             DropTable("dbo.Students");
+            DropTable("dbo.Faculties");
             DropTable("dbo.Specialities");
             DropTable("dbo.Groups");
-            DropTable("dbo.Faculties");
+            DropTable("dbo.DisciplineWorkloads");
+            DropTable("dbo.Workloads");
+            DropTable("dbo.SpecialPositions");
             DropTable("dbo.Employees");
             DropTable("dbo.DisciplineYears");
             DropTable("dbo.Disciplines");

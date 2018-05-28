@@ -55,6 +55,17 @@ namespace DBRepository.Migrations
               p => p.Name,              
               pin = new Speciality { Name = "ПИН.РИС", FacultyId = fit.Id }
             );
+
+            context.Discipline.AddOrUpdate(d=>d.Name,
+                new Discipline {DepartmentId = dep.Id,Name = "ГЭК",TypeOfDiscipline=DisciplineType.SPECIAL,SpecialType = SpecialDisciplineKind.GEK },
+                new Discipline { DepartmentId = dep.Id, Name = "ГЭК магистров", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.GEK },
+                new Discipline { DepartmentId = dep.Id, Name = "ГАК", TypeOfDiscipline = DisciplineType.SPECIAL,SpecialType = SpecialDisciplineKind.GAK },
+                new Discipline { DepartmentId = dep.Id, Name = "Председатель ГАК", TypeOfDiscipline = DisciplineType.SPECIAL,SpecialType=SpecialDisciplineKind.GAK_PRED },
+                new Discipline { DepartmentId = dep.Id, Name = "Руководство магистрами", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.MAG_RUK },
+                new Discipline { DepartmentId = dep.Id, Name = "Руководство бакалаврами", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.BAK_RUK },
+                new Discipline { DepartmentId = dep.Id, Name = "Рецензирование магистранстких работ", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.MAG_RETZ},
+                new Discipline { DepartmentId = dep.Id, Name = "Руководство кафедрой", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.RUK_KAF }
+               );
             context.SpecialPositions.AddOrUpdate(
                 s => s.Name,
                 new SpecialPosition {Name = "Заведующий кафедрой",ExecutorId = emp.Id });

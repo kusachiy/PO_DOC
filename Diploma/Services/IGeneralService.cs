@@ -53,5 +53,7 @@ namespace Diploma.Services
         List<Workload> GetAllWorkloadsByLocalWorkload(Guid id);
         void DeleteWorkload(Workload workload);
         List<DisciplineWorkload> GetAllDisciplineWorkloadsByYearAndSemester(StudyYear selectedStudyYear, Semester selectedSemester);
+        List<Discipline> GetAllSpecialDisciplines();
+        void SaveDisciplineWorkloads(List<DisciplineWorkload> disciplineWorkloads);
     }
 }

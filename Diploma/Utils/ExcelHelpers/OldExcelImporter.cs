@@ -84,7 +84,7 @@ namespace Diploma.Utils.ExcelHelpers
                     {
                         bool isSpecial = !(kr || kp || ekz || zach);
                         bool hasWeeks = lectures + labs + practices != 0;
-                        SpecialDisciplineKind? type = null;
+                        PracticeKind? type = null;
                         if (!hasWeeks && isSpecial)//выбрасываем всё кроме практик и учебных дисциплин
                         {
                             counter++;
@@ -92,7 +92,8 @@ namespace Diploma.Utils.ExcelHelpers
                         }
                         else if (isSpecial)
                             type = GetSpecial(disciplineName);//определяем тип практики
-                        discipline = new Discipline { Department = _defaultDepartment, Name = disciplineName, IsSpecial = isSpecial,SpecialType = type};
+                        discipline = new Discipline { Department = _defaultDepartment, Name = disciplineName,
+                            PracticeType = type, TypeOfDiscipline = type==null?DisciplineType.EASY:DisciplineType.PRACTICE};
                         _newDisciplines.Add(discipline);
                         Log.Add($"Неизвестная дисциплина:'[{discipline.Name}]'");
                     }
@@ -164,9 +165,81 @@ namespace Diploma.Utils.ExcelHelpers
                 _service.AddOrUpdateGroup(group);
             foreach (var workload in _workloads) //6с.
                 _service.AddOrUpdateDisciplineWorkload(workload);
+            InsertBaseDisciplines();
             WorkloadAssigmnent();
         }
-
+        private void InsertBaseDisciplines()
+        {
+            List<Discipline> baseDisciplines = _service.GetAllSpecialDisciplines();
+            var disciplineWorkloads = new List<DisciplineWorkload>();
+            disciplineWorkloads.Add(new DisciplineWorkload {
+                DisciplineYear = new DisciplineYear { Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.GEK)},
+                StudyYear = _studyYear, Semester = _semesters.FirstOrDefault(s => s.Number == 8) });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.LastOrDefault(d => d.SpecialType == SpecialDisciplineKind.GEK)
+                },
+                StudyYear = _studyYear,
+                Semester = _semesters.FirstOrDefault(s => s.Number == 12)
+            });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.GAK)
+                },
+                StudyYear = _studyYear,
+                Semester = _semesters.FirstOrDefault(s => s.Number == 8)
+            });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.GAK_PRED)
+                },
+                StudyYear = _studyYear,
+                Semester = _semesters.FirstOrDefault(s => s.Number == 8)
+            });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.BAK_RUK)
+                },
+                StudyYear = _studyYear,
+                Semester = _semesters.FirstOrDefault(s => s.Number == 8)
+            });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.MAG_RUK)
+                },
+                StudyYear = _studyYear,
+                Semester = _semesters.FirstOrDefault(s => s.Number == 12)
+            });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.MAG_RETZ)
+                },
+                StudyYear = _studyYear,
+                Semester = _semesters.FirstOrDefault(s => s.Number == 12)
+            });
+            disciplineWorkloads.Add(new DisciplineWorkload
+            {
+                DisciplineYear = new DisciplineYear
+                {
+                    Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.RUK_KAF)
+                },
+                StudyYear = _studyYear                
+            });
+            _service.SaveDisciplineWorkloads(disciplineWorkloads);
+            _workloads.AddRange(disciplineWorkloads);
+        }
         public void WorkloadAssigmnent()
         {
             Log = new List<string>();
@@ -202,17 +275,17 @@ namespace Diploma.Utils.ExcelHelpers
             }
         }
 
-        private static SpecialDisciplineKind? GetSpecial(string disciplineName)
+        private static PracticeKind? GetSpecial(string disciplineName)
         {
             disciplineName = disciplineName.ToLower();
             if (disciplineName.Contains("уч") && disciplineName.Contains("практ"))
-                return SpecialDisciplineKind.LearningPractice;
+                return PracticeKind.LearningPractice;
             if (disciplineName.Contains("преддип") && disciplineName.Contains("практ"))
-                return SpecialDisciplineKind.UndergraduatePractice;
+                return PracticeKind.UndergraduatePractice;
             if ((disciplineName.Contains("нир") || (disciplineName.Contains("ниир")) && disciplineName.Contains("практ") || (disciplineName.Contains("науч")&& (disciplineName.Contains("иссл")))))
-                return SpecialDisciplineKind.NIIR;
+                return PracticeKind.NIIR;
             if (disciplineName.Contains("произв") && disciplineName.Contains("практ"))
-                return SpecialDisciplineKind.ManufacturePractice;
+                return PracticeKind.ManufacturePractice;
             return null;
         }
     }

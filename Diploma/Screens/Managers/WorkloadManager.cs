@@ -124,7 +124,7 @@ namespace Diploma.Screens.Managers
             }
             SetWaiting(true);
             var service = Get<IGeneralService>();
-            Workloads = await Task.Run(() => service.GetAllWorkloadsByYear(SelectedStudyYear));
+            Workloads = await Task.Run(() => service.GetAllWorkloadsByYear(SelectedStudyYear).OrderBy(w=>w.LocalWorkload.Semester?.Number).ToList());
             RaisePropertyChanged("Workloads");
             SetWaiting(false);
 

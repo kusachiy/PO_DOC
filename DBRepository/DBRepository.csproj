@@ -57,21 +57,9 @@
     <Compile Include="Factories\AccessContextFactory.cs" />
     <Compile Include="Factories\SQLSERVERContextFactory.cs" />
     <Compile Include="Factories\SwitchableContetxFactory.cs" />
-    <Compile Include="Migrations\201803212050044_Initial.cs" />
-    <Compile Include="Migrations\201803212050044_Initial.Designer.cs">
-      <DependentUpon>201803212050044_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803232019569_chc.cs" />
-    <Compile Include="Migrations\201803232019569_chc.Designer.cs">
-      <DependentUpon>201803232019569_chc.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803291025529_SpecPos.cs" />
-    <Compile Include="Migrations\201803291025529_SpecPos.Designer.cs">
-      <DependentUpon>201803291025529_SpecPos.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804031212041_SpecialType.cs" />
-    <Compile Include="Migrations\201804031212041_SpecialType.Designer.cs">
-      <DependentUpon>201804031212041_SpecialType.cs</DependentUpon>
+    <Compile Include="Migrations\201805281100490_Initial-Migration.cs" />
+    <Compile Include="Migrations\201805281100490_Initial-Migration.Designer.cs">
+      <DependentUpon>201805281100490_Initial-Migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Repositories\DisciplineYearRepository.cs" />
     <Compile Include="Repositories\DisciplineWorkloadRepository.cs" />
@@ -121,17 +109,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803212050044_Initial.resx">
-      <DependentUpon>201803212050044_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803232019569_chc.resx">
-      <DependentUpon>201803232019569_chc.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803291025529_SpecPos.resx">
-      <DependentUpon>201803291025529_SpecPos.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804031212041_SpecialType.resx">
-      <DependentUpon>201804031212041_SpecialType.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805281100490_Initial-Migration.resx">
+      <DependentUpon>201805281100490_Initial-Migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

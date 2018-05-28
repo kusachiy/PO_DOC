@@ -80,7 +80,7 @@ namespace Diploma.Screens.Managers
         {
             SetWaiting(true);
             var service = Get<IGeneralService>();
-            Disciplines = service.GetAllDisciplines().OrderBy(d => d.Name).OrderBy(d => d.IsSpecial).ToList();
+            Disciplines = service.GetAllDisciplines().OrderBy(d => d.Name).OrderBy(d => d.TypeOfDiscipline).ToList();
             RaisePropertyChanged("Disciplines");
             SetWaiting(false);
         }

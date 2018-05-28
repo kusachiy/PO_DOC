@@ -9,8 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Models
-{       
-    public enum SpecialDisciplineKind
+{
+    public enum DisciplineType
+    {
+        EASY,PRACTICE,SPECIAL
+    }
+
+    public enum PracticeKind
     {
         [Description("Учебная практика")]
         LearningPractice,
@@ -19,11 +24,17 @@ namespace Models
         [Description("Преддипломная практика")]
         UndergraduatePractice,
         [Description("НИИР")]
-        NIIR,
+        NIIR
+    }
+
+    public enum SpecialDisciplineKind
+    {         
         [Description("ГЭК")]
         GEK,
         [Description("ГАК")]
         GAK,
+        [Description("Председатель ГАК")]
+        GAK_PRED,
         [Description("Руководство магистрами")]
         MAG_RUK,
         [Description("Руководство бакалаврами")]
@@ -42,16 +53,15 @@ namespace Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        /*[NotMapped]
-        public DisciplineType TypeOfDiscipline { get; set; }
-        public string StringType => TypeOfDiscipline.ToDescriptionString();*/
         public Guid DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; } // Могут быть конфликты из-за неправильной схемы данных.
-        public bool IsSpecial { get; set; }
-        public string StringSpecial => IsSpecial?"Специальная":"Простая"; 
+        public DisciplineType TypeOfDiscipline { get; set; }
         public SpecialDisciplineKind? SpecialType { get; set; }
+        public PracticeKind? PracticeType { get; set; }
         public string StringSpecialType => SpecialType?.ToDescriptionString() ?? "";
+        public string StringPracticeType => PracticeType?.ToDescriptionString() ?? "";
+
         [NotMapped]
         public int SpecialTypeSelector
         {

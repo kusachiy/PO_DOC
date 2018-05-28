@@ -21,7 +21,7 @@ namespace Diploma.Utils.ExcelHelpers
         }
         public static void ExportIndividualPlan(Employee employee, StudyYear year)
         {
-            string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Templates\IndPlanTemplate.xltx");            
+            string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Templates\IndPlanTemplate.xltx");
             Microsoft.Office.Interop.Excel.Application ObjExcel = new Microsoft.Office.Interop.Excel.Application();
             Workbook ObjWorkBook;
             Worksheet ObjWorkSheet;//Книга.
@@ -37,20 +37,25 @@ namespace Diploma.Utils.ExcelHelpers
             ObjExcel.Visible = true;
             ObjExcel.UserControl = true;
         }
-        private static void PrintSemester(Employee employee,SemesterType semesterType, StudyYear year, Workbook objWorkBook)
+        private static void PrintSemester(Employee employee, SemesterType semesterType, StudyYear year, Workbook objWorkBook)
         {
             int descrList = semesterType == SemesterType.Autumm ? 1 : 2;
             int paramsList = semesterType == SemesterType.Autumm ? 3 : 4;
-            List<DisciplineWorkload> workloads = semesterType == SemesterType.Autumm?
-                _service.GetAllEmloyeeWorkloadsByYearAutumm(employee,year.Year) : _service.GetAllEmloyeeWorkloadsByYearSpring(employee, year.Year);
-            if (workloads.Count>0)
+            List<DisciplineWorkload> workloads = semesterType == SemesterType.Autumm ?
+                _service.GetAllEmloyeeWorkloadsByYearAutumm(employee, year.Year) : _service.GetAllEmloyeeWorkloadsByYearSpring(employee, year.Year);
+            if (workloads.Count > 0)
             {
                 Worksheet DescrSheet = (Worksheet)objWorkBook.Sheets[descrList];
                 Worksheet ParamsSheet = (Worksheet)objWorkBook.Sheets[paramsList];
                 int currentRow = IndPlanExport.Default.DisciplinesStartRow;
-                foreach(var w in workloads)
+                foreach (var w in workloads)
                 {
-                    DescrSheet.Cells[currentRow, IndPlanExport.Default.DisciplineNameColumn] =w.DisciplineYear.Discipline.ToString();                 
+                    DescrSheet.Cells[currentRow, IndPlanExport.Default.DisciplineNameColumn] = w.DisciplineYear.Discipline.ToString();
+                    if (w.DisciplineYear.Discipline.TypeOfDiscipline == DisciplineType.SPECIAL)
+                    {
+                        currentRow += 2;
+                        continue;
+                    }
                     int cource = year.Year - w.Group.EntryYear + 1;
                     string descr = string.Format("{0},{1},{2} курс", w.Group.Speciality.Faculty, w.Group.Speciality, cource);
                     DescrSheet.Cells[currentRow, IndPlanExport.Default.DisciplineDescrColumn] = descr;
@@ -82,16 +87,15 @@ namespace Diploma.Utils.ExcelHelpers
                     double prPr = w.DisciplineYear.CountOfManufacturePracticeWeeks * Properties.CalculationSettings.Default.PrPr;
                     double preddipPr = w.DisciplineYear.CountOfUndergraduatePracticeWeeks * Properties.CalculationSettings.Default.PreddipPr;
                     double NIIR = w.DisciplineYear.CountOfNIIR * Properties.CalculationSettings.Default.NIIR * countStud;//нир
-                    double GEK =w.DisciplineYear.Discipline.SpecialType==SpecialDisciplineKind.GEK ? (Properties.CalculationSettings.Default.GEK * countStud) : 0;//ГЭК.
-                    //double GAKpred = Convert.ToBoolean(reader[24]) ? (Properties.CalculationSettings.Default.GAKPred * countStud) : 0;//ГAКпред.
-                    double GAKpred = 0;//ГAКпред.
-                    double GAK = w.DisciplineYear.Discipline.SpecialType==SpecialDisciplineKind.GAK ? (Properties.CalculationSettings.Default.GAK * countStud) : 0;//ГAК
-                    double rukMag = w.DisciplineYear.Discipline.SpecialType==SpecialDisciplineKind.MAG_RUK ? (Properties.CalculationSettings.Default.MAGRuk * countStud) : 0;//рук маг
-                    geks = GEK + GAK + GAKpred;                  
-                    ruk += w.DisciplineYear.Discipline.SpecialType==SpecialDisciplineKind.ASP_RUK ? (Properties.CalculationSettings.Default.AspRuk * countStud) : 0f;
-                    ruk += rukMag;                    
-                    ruk += w.DisciplineYear.Discipline.SpecialType==SpecialDisciplineKind.BAK_RUK ? (countStud * Properties.CalculationSettings.Default.DPruk) : 0f;
-                   
+                    double GEK = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GEK ? (Properties.CalculationSettings.Default.GEK * countStud) : 0;//ГЭК.
+                    double GAKpred = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK_PRED? (Properties.CalculationSettings.Default.GEK * countStud) : 0;
+                    double GAK = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK ? (Properties.CalculationSettings.Default.GAK * countStud) : 0;//ГAК
+                    double rukMag = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.MAG_RUK ? (Properties.CalculationSettings.Default.MAGRuk * countStud) : 0;//рук маг
+                    geks = GEK + GAK + GAKpred;
+                    ruk += w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.ASP_RUK ? (Properties.CalculationSettings.Default.AspRuk * countStud) : 0f;
+                    ruk += rukMag;
+                    ruk += w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.BAK_RUK ? (countStud * Properties.CalculationSettings.Default.DPruk) : 0f;
+
                     other += NIIR;
                     /*string disciplineName = reader[0].ToString();
                     if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
@@ -105,10 +109,10 @@ namespace Diploma.Utils.ExcelHelpers
                     ParamsSheet.Cells[currentRow - 1, Properties.IndPlanExport.Default.DisciplineSettingsStartColumn + 12] = 0;
                     ParamsSheet.Cells[currentRow - 1, Properties.IndPlanExport.Default.DisciplineSettingsStartColumn + 13] = geks;
                     ParamsSheet.Cells[currentRow - 1, Properties.IndPlanExport.Default.DisciplineSettingsStartColumn + 14] = ruk;
-                    ParamsSheet.Cells[currentRow - 1, Properties.IndPlanExport.Default.DisciplineSettingsStartColumn + 15] = other;                 
+                    ParamsSheet.Cells[currentRow - 1, Properties.IndPlanExport.Default.DisciplineSettingsStartColumn + 15] = other;
                     currentRow += 2;
                 }
-            }     
+            }
         }
         public static void ExportSemester(StudyYear year, SemesterType semester)
         {
@@ -116,21 +120,27 @@ namespace Diploma.Utils.ExcelHelpers
             string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Templates\SemesterTemplate.xltx");
             Dictionary<string, int> counts = new Dictionary<string, int>() { { "ФИТ", 0 }, { "МСФ", 0 }, { "ИДПО", 0 }, { "МАГ", 0 } };
             List<DisciplineWorkload> workloadrs = _service.GetAllDisciplineWorkloadsByYearAndSemesterType(year.Year, semester);
-            if (workloadrs.Count>0)
+            if (workloadrs.Count > 0)
             {
                 Microsoft.Office.Interop.Excel.Application ObjExcel = new Microsoft.Office.Interop.Excel.Application();
                 Workbook ObjWorkBook;
-                Worksheet ObjWorkSheet;                
+                Worksheet ObjWorkSheet;
                 ObjWorkBook = ObjExcel.Workbooks.Add(path);
                 ObjWorkSheet = (Worksheet)ObjWorkBook.Sheets[1];
-                ObjWorkBook.Title = string.Format("Отчет {0} семестр({1} / {2})", semester.ToDescriptionString(), year.Year, year.Year+1);
+                ObjWorkBook.Title = string.Format("Отчет {0} семестр({1} / {2})", semester.ToDescriptionString(), year.Year, year.Year + 1);
                 ObjWorkSheet.Cells[3, 1] = string.Format("экзаменационной сессии  за  {0} семестр {1} / {2} учебного года", semester, year.Year, Convert.ToInt32(year.Year) + 1);
                 foreach (var w in workloadrs)
-                {                
-                    Group group = w.Group;                   
+                {
+                    int rowCounter = SemesterExport.Default.FITStartRow;
+                    if (w.DisciplineYear.Discipline.TypeOfDiscipline == DisciplineType.SPECIAL)
+                    {
+                        rowCounter++;
+                        continue;
+                    }
+                    Group group = w.Group;
                     int cource = year.Year - group.EntryYear + 1;
                     Discipline discipline = w.DisciplineYear.Discipline;
-                    int countStud =group.CountOfStudents;
+                    int countStud = group.CountOfStudents;
                     int weeks = w.Semester.CountOfWeeks;
                     int lec = w.DisciplineYear.CountOfLecture;
                     int prac = w.DisciplineYear.CountOfPractice;
@@ -141,7 +151,6 @@ namespace Diploma.Utils.ExcelHelpers
                     bool zach = w.DisciplineYear.HasCR;
 
                     float summ = WorkloadsCalculator.GetWorkloadCost(w);
-                    int rowCounter = SemesterExport.Default.FITStartRow;
                     int index = 0;
                     if (w.Group.StudyForm != StudyForm.FullTime)
                     {
@@ -156,7 +165,7 @@ namespace Diploma.Utils.ExcelHelpers
                         {
                             rowCounter += counts["ФИТ"];
                             counts["ФИТ"]++;
-                            index = counts["ФИТ"];                           
+                            index = counts["ФИТ"];
                         }
                         else
                         {
@@ -171,7 +180,7 @@ namespace Diploma.Utils.ExcelHelpers
                         rowCounter = counts["ФИТ"] + counts["МСФ"] + SemesterExport.Default.MSFStartRow;
                         counts["МСФ"]++;
                         index = counts["МСФ"];
-                    }         
+                    }
                     {
                         Range line = (Range)ObjWorkSheet.Rows[rowCounter];
                         line.Insert();
@@ -190,17 +199,17 @@ namespace Diploma.Utils.ExcelHelpers
 
                 ObjExcel.Visible = true;
                 ObjExcel.UserControl = true;
-            }           
+            }
         }
         public static void ExportWorkload(StudyYear year)
         {
             string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Templates\WorkloadTemplate.xltx");
             Microsoft.Office.Interop.Excel.Application ObjExcel = new Microsoft.Office.Interop.Excel.Application();
             Workbook ObjWorkBook;
-            Worksheet ObjWorkSheet;         
+            Worksheet ObjWorkSheet;
             ObjWorkBook = ObjExcel.Workbooks.Add(path);//System.Reflection.Missing.Value);
             ObjWorkSheet = (Worksheet)ObjWorkBook.Sheets[1];
-            ObjWorkBook.Title = string.Format("Нагрузка ({0} / {1})", year.Year, year.Year+1);
+            ObjWorkBook.Title = string.Format("Нагрузка ({0} / {1})", year.Year, year.Year + 1);
             //
 
             for (int i = 1; i < Math.Min(ObjWorkBook.Sheets.Count, 18); i++)
@@ -216,21 +225,24 @@ namespace Diploma.Utils.ExcelHelpers
             }
 
             foreach (var d in dis_workloads)
-            {        
-               
+            {
+                if (d.DisciplineYear.Discipline.TypeOfDiscipline == DisciplineType.SPECIAL)
+                {                    
+                    continue;
+                }
                 List<Worksheet> toWriteList = new List<Worksheet>();
                 if (d.Group.Speciality.Faculty.ShortName == "МСФ")
-                    toWriteList.Add(ObjWorkBook.Sheets[6]);                
+                    toWriteList.Add(ObjWorkBook.Sheets[6]);
                 else
                 {
-                    if (d.Group.StudyForm==StudyForm.PartTime)                   
-                        toWriteList.Add(ObjWorkBook.Sheets[5]);                   
+                    if (d.Group.StudyForm == StudyForm.PartTime)
+                        toWriteList.Add(ObjWorkBook.Sheets[5]);
                     else
                     {
-                        if (d.Group.Qualification == Qualification.Bachelor)                        
-                            toWriteList.Add(ObjWorkBook.Sheets[4]);                       
+                        if (d.Group.Qualification == Qualification.Bachelor)
+                            toWriteList.Add(ObjWorkBook.Sheets[4]);
                         else
-                            toWriteList.Add(ObjWorkBook.Sheets[8]);                        
+                            toWriteList.Add(ObjWorkBook.Sheets[8]);
                     }
                 }
                 Dictionary<Worksheet, Workload> assignsForTeachers = new Dictionary<Worksheet, Workload>();
@@ -247,7 +259,7 @@ namespace Diploma.Utils.ExcelHelpers
                             {
                                 sheet = ObjWorkBook.Sheets[teacherName];
                             }
-                            catch                            
+                            catch
                             {
                                 throw new Exception($"В книге нет листа для преподавателя '{teacherName}' ");
                             }
@@ -289,7 +301,7 @@ namespace Diploma.Utils.ExcelHelpers
             sheet.Cells[rowCounters[sheet], 1] = rowCounters[sheet] - 5;
             sheet.Cells[rowCounters[sheet], 2] = disciplineWorkload.DisciplineYear.Discipline.Name;
             sheet.Cells[rowCounters[sheet], 3] = disciplineWorkload.Group.Speciality.Name;
-            sheet.Cells[rowCounters[sheet], 5] = disciplineWorkload.Group.StudyForm==StudyForm.FullTime ? "о" : "з";
+            sheet.Cells[rowCounters[sheet], 5] = disciplineWorkload.Group.StudyForm == StudyForm.FullTime ? "о" : "з";
             sheet.Cells[rowCounters[sheet], 4] = disciplineWorkload.Group.Speciality.Faculty.ShortName;
             sheet.Cells[rowCounters[sheet], 6] = disciplineWorkload.Semester.Number;
             sheet.Cells[rowCounters[sheet], 7] = countStud;
@@ -304,27 +316,27 @@ namespace Diploma.Utils.ExcelHelpers
             sheet.Cells[rowCounters[sheet], 18] = disciplineWorkload.DisciplineYear.HasKP ? "1" : "";
             //sheet.Cells[rowCounters[sheet], 22] = Convert.ToBoolean(reader[33]) ? "1" : "";//нир
             sheet.Cells[rowCounters[sheet], 19 + 23] = disciplineWorkload.DisciplineYear.CountOfLearnigPracticeWeeks != 0 ? disciplineWorkload.DisciplineYear.CountOfLearnigPracticeWeeks * CalculationSettings.Default.UchPr : 0;//уч пр.
-            sheet.Cells[rowCounters[sheet], 20 + 23] = disciplineWorkload.DisciplineYear.CountOfManufacturePracticeWeeks != 0 ? disciplineWorkload.DisciplineYear.CountOfManufacturePracticeWeeks * CalculationSettings.Default.PrPr:0;//пр пр.
+            sheet.Cells[rowCounters[sheet], 20 + 23] = disciplineWorkload.DisciplineYear.CountOfManufacturePracticeWeeks != 0 ? disciplineWorkload.DisciplineYear.CountOfManufacturePracticeWeeks * CalculationSettings.Default.PrPr : 0;//пр пр.
             sheet.Cells[rowCounters[sheet], 21 + 23] = disciplineWorkload.DisciplineYear.CountOfUndergraduatePracticeWeeks != 0 ? disciplineWorkload.DisciplineYear.CountOfUndergraduatePracticeWeeks * CalculationSettings.Default.PreddipPr : 0;//преддип пр.
             sheet.Cells[rowCounters[sheet], 22 + 23] = disciplineWorkload.DisciplineYear.CountOfNIIR != 0 ? (disciplineWorkload.DisciplineYear.CountOfNIIR) * CalculationSettings.Default.NIIR * countStud : 0;//нир
-            ((Range)(sheet.Cells[rowCounters[sheet], 24 + 23])).Value = disciplineWorkload.DisciplineYear.Discipline.SpecialType==SpecialDisciplineKind.GEK ? (CalculationSettings.Default.GEK * countStud) : 0;//ГЭК.
+            ((Range)(sheet.Cells[rowCounters[sheet], 24 + 23])).Value = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GEK ? (CalculationSettings.Default.GEK * countStud) : 0;//ГЭК.
             sheet.Cells[rowCounters[sheet], 25 + 23] = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK ? (CalculationSettings.Default.GAK * countStud) : 0;//ГAК.
-            /*sheet.Cells[rowCounters[sheet], 26 + 23] = Convert.ToBoolean(reader[24]) ? (ApplicationSettings.CalculationSettings.GAKPred * countStud) : 0;//ГAКпред.
-            sheet.Cells[rowCounters[sheet], 27 + 23] = Convert.ToBoolean(reader[25]) ? (ApplicationSettings.CalculationSettings.DPruk * countStud) : 0;//допуск
-            sheet.Cells[rowCounters[sheet], 28 + 23] = Convert.ToBoolean(reader[26]) ? (4 * countStud).ToString() : "";//рец дисс.
-            */ 
-            /*string disciplineName = reader[4].ToString();
-            if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
-                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
-            if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
-                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;
-            sheet.Cells[rowCounters[sheet], 32 + 23] = Convert.ToBoolean(reader[30]) ? (30 * Convert.ToInt32(reader[30])).ToString() : "";//рук маг
-            sheet.Cells[rowCounters[sheet], 31 + 23] = Convert.ToBoolean(reader[29]) ? (countStud * ApplicationSettings.CalculationSettings.AspRuk) : 0f;
-            if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
-                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
-            if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
-                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;*/
+                                                                                                                                                                                                 /*sheet.Cells[rowCounters[sheet], 26 + 23] = Convert.ToBoolean(reader[24]) ? (ApplicationSettings.CalculationSettings.GAKPred * countStud) : 0;//ГAКпред.
+                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 27 + 23] = Convert.ToBoolean(reader[25]) ? (ApplicationSettings.CalculationSettings.DPruk * countStud) : 0;//допуск
+                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 28 + 23] = Convert.ToBoolean(reader[26]) ? (4 * countStud).ToString() : "";//рец дисс.
+                                                                                                                                                                                                 */
+                                                                                                                                                                                                 /*string disciplineName = reader[4].ToString();
+                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
+                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
+                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
+                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;
+                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 32 + 23] = Convert.ToBoolean(reader[30]) ? (30 * Convert.ToInt32(reader[30])).ToString() : "";//рук маг
+                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 31 + 23] = Convert.ToBoolean(reader[29]) ? (countStud * ApplicationSettings.CalculationSettings.AspRuk) : 0f;
+                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
+                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
+                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
+                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;*/
             rowCounters[sheet]++;
-        }       
+        }
     }
 }

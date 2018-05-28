@@ -14,10 +14,10 @@ namespace Models
         public Guid DisciplineYearId { get; set; }
         [ForeignKey("DisciplineYearId")]
         public DisciplineYear DisciplineYear { get; set; }
-        public Guid GroupId { get; set; }
+        public Guid? GroupId { get; set; }
         [ForeignKey("GroupId")]
         public Group Group { get; set; }            
-        public Guid SemesterId { get; set; }
+        public Guid? SemesterId { get; set; }
         [ForeignKey("SemesterId")]
         public Semester Semester { get; set; }
         public Guid StudyYearId { get; set; }

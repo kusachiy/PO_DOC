@@ -95,8 +95,23 @@ namespace Diploma.Utils.ExcelHelpers
                     discipline = _newDisciplines.FirstOrDefault(d => d.Name == disciplineName);
                     if (discipline == null)
                     {
+                        bool isSpecial = !(kr || kp || ekz || zach);
                         bool hasWeeks = lectures + labs + practices == 0;
-                        discipline = new Discipline { Department = _defaultDepartment, Name = disciplineName, IsSpecial = !(kr || kp || ekz || zach || !hasWeeks) };
+                        PracticeKind? type = null;
+                        if (!hasWeeks && isSpecial)//выбрасываем всё кроме практик и учебных дисциплин
+                        {
+                            counter++;
+                            continue;
+                        }
+                        else if (isSpecial)
+                            type = GetSpecial(disciplineName);//определяем тип практики
+                        discipline = new Discipline
+                        {
+                            Department = _defaultDepartment,
+                            Name = disciplineName,
+                            PracticeType = type,
+                            TypeOfDiscipline = type == null ? DisciplineType.EASY : DisciplineType.PRACTICE
+                        };
                         _newDisciplines.Add(discipline);
                         Log.Add($"Неизвестная дисциплина:'[{discipline.Name}]'");
                     }
@@ -205,6 +220,19 @@ namespace Diploma.Utils.ExcelHelpers
             {
                 GC.Collect();
             }
+        }
+        private static PracticeKind? GetSpecial(string disciplineName)
+        {
+            disciplineName = disciplineName.ToLower();
+            if (disciplineName.Contains("уч") && disciplineName.Contains("практ"))
+                return PracticeKind.LearningPractice;
+            if (disciplineName.Contains("преддип") && disciplineName.Contains("практ"))
+                return PracticeKind.UndergraduatePractice;
+            if ((disciplineName.Contains("нир") || (disciplineName.Contains("ниир")) && disciplineName.Contains("практ") || (disciplineName.Contains("науч") && (disciplineName.Contains("иссл")))))
+                return PracticeKind.NIIR;
+            if (disciplineName.Contains("произв") && disciplineName.Contains("практ"))
+                return PracticeKind.ManufacturePractice;
+            return null;
         }
     }    
 }

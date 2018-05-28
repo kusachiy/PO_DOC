@@ -455,7 +455,7 @@ namespace Diploma.Services
                     return null;
                 var workload = _workloadRepository.Get(
                     w => w.LocalWorkload.DisciplineYear.DisciplineId == discipline.Id
-                    && w.LocalWorkload.Group.SpecialityId == group.SpecialityId
+                    //&& w.LocalWorkload.Group.SpecialityId == group.SpecialityId
                     && w.LocalWorkload.StudyYear.Year == studyYear.Year - 1);
                 return workload?.EmployeeId;
             }
@@ -500,14 +500,14 @@ namespace Diploma.Services
         {
             using (Db.BeginReadOnlyWork())
             {
-                return GetAllEmloyeeWorkloadsByYear(employee, year).Where(e => e.Semester.Type == SemesterType.Autumm).ToList();
+                return GetAllEmloyeeWorkloadsByYear(employee, year).Where(e => e.Semester?.Type == SemesterType.Autumm).ToList();
             }
         }
         public List<DisciplineWorkload> GetAllEmloyeeWorkloadsByYearSpring(Employee employee, int year)
         {
             using (Db.BeginReadOnlyWork())
             {
-                return GetAllEmloyeeWorkloadsByYear(employee, year).Where(e => e.Semester.Type == SemesterType.Spring).ToList();
+                return GetAllEmloyeeWorkloadsByYear(employee, year).Where(e => e.Semester?.Type == SemesterType.Spring).ToList();
             }
         }
 
@@ -518,7 +518,7 @@ namespace Diploma.Services
                 return _disciplineWorkloadRepository
                     .GetMany(w => w.StudyYear.Year == year,
                     w=>w.Group,w=>w.DisciplineYear,w=>w.DisciplineYear.Discipline,w=>w.Semester,w => w.Group.Speciality.Faculty,w=>w.Group.Speciality)
-                    .Where(w => w.Semester.Type == semester).ToList();
+                    .Where(w => w.Semester?.Type == semester).ToList();
             }
         }
 
@@ -550,6 +550,22 @@ namespace Diploma.Services
             }
         }
 
-        
+        public List<Discipline> GetAllSpecialDisciplines()
+        {
+            using (Db.BeginReadOnlyWork())
+            {
+                return _disciplineRepository.GetMany(d=>d.TypeOfDiscipline == DisciplineType.SPECIAL);
+            }
+        }
+
+        public void SaveDisciplineWorkloads(List<DisciplineWorkload> disciplineWorkloads)
+        {
+            foreach (var d in disciplineWorkloads)
+            {
+                d.DisciplineYearId = d.DisciplineYear.Id;
+                AddOrUpdateDisciplineYear(d.DisciplineYear);
+                AddOrUpdateDisciplineWorkload(d);
+            }
+        }
     }
 }

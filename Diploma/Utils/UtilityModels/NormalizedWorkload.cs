@@ -85,7 +85,7 @@ namespace Diploma.Utils.UtilityModels
                 case SpecialDisciplineKind.GAK:
                     GAKControlCost = settings.GAK * students;
                     break;
-                case SpecialDisciplineKind.LearningPractice:
+               /* case SpecialDisciplineKind.LearningPractice:
                     LearningPracticeCost = settings.UchPr * year.CountOfLearnigPracticeWeeks;
                     break;
                 case SpecialDisciplineKind.ManufacturePractice:
@@ -93,7 +93,7 @@ namespace Diploma.Utils.UtilityModels
                     break;
                 case SpecialDisciplineKind.UndergraduatePractice:
                     LearningPracticeCost = settings.PreddipPr * students;
-                    break;
+                    break;*/
                 case SpecialDisciplineKind.BAK_RUK:
                     BachelorVKRRukCost = settings.DPruk * students;
                     break;
