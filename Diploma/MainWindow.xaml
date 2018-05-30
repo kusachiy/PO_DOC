@@ -12,6 +12,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:screens="clr-namespace:Diploma.Screens"
     Title="{Binding Title}"
+    Icon="document.ico"
+    IconBitmapScalingMode="HighQuality"
+    IconScalingMode="ScaleDownLargerFrame"
     WindowState="Maximized"
     mc:Ignorable="d">
     <controls:MetroWindow.DataContext>

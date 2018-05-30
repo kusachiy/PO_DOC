@@ -165,6 +165,7 @@ namespace Diploma.Utils.ExcelHelpers
                 _service.AddOrUpdateGroup(group);
             foreach (var workload in _workloads) //6с.
                 _service.AddOrUpdateDisciplineWorkload(workload);
+            _groups.AddRange(_newGroups);
             InsertBaseDisciplines();
             WorkloadAssigmnent();
         }
@@ -172,17 +173,22 @@ namespace Diploma.Utils.ExcelHelpers
         {
             List<Discipline> baseDisciplines = _service.GetAllSpecialDisciplines();
             var disciplineWorkloads = new List<DisciplineWorkload>();
+            var group4cource = _groups.FirstOrDefault(g => _studyYear.Year - g.EntryYear == 3);
+            var group6cource = _groups.FirstOrDefault(g => _studyYear.Year - g.EntryYear == 5);
+
             disciplineWorkloads.Add(new DisciplineWorkload {
-                DisciplineYear = new DisciplineYear { Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.GEK)},
-                StudyYear = _studyYear, Semester = _semesters.FirstOrDefault(s => s.Number == 8) });
+                DisciplineYear = new DisciplineYear { Discipline = baseDisciplines.First(s=>s.Name == "ГЭК") },
+                StudyYear = _studyYear, Semester = _semesters.FirstOrDefault(s => s.Number == 8),
+                Group = group4cource });
             disciplineWorkloads.Add(new DisciplineWorkload
             {
                 DisciplineYear = new DisciplineYear
                 {
-                    Discipline = baseDisciplines.LastOrDefault(d => d.SpecialType == SpecialDisciplineKind.GEK)
+                    Discipline = baseDisciplines.First(d => d.SpecialType == SpecialDisciplineKind.GEK&&d.Name!="ГЭК")
                 },
                 StudyYear = _studyYear,
-                Semester = _semesters.FirstOrDefault(s => s.Number == 12)
+                Semester = _semesters.FirstOrDefault(s => s.Number == 12),
+                Group = group6cource
             });
             disciplineWorkloads.Add(new DisciplineWorkload
             {
@@ -191,7 +197,8 @@ namespace Diploma.Utils.ExcelHelpers
                     Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.GAK)
                 },
                 StudyYear = _studyYear,
-                Semester = _semesters.FirstOrDefault(s => s.Number == 8)
+                Semester = _semesters.FirstOrDefault(s => s.Number == 8),
+                Group = group4cource
             });
             disciplineWorkloads.Add(new DisciplineWorkload
             {
@@ -200,7 +207,8 @@ namespace Diploma.Utils.ExcelHelpers
                     Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.GAK_PRED)
                 },
                 StudyYear = _studyYear,
-                Semester = _semesters.FirstOrDefault(s => s.Number == 8)
+                Semester = _semesters.FirstOrDefault(s => s.Number == 8),
+                Group = group4cource
             });
             disciplineWorkloads.Add(new DisciplineWorkload
             {
@@ -209,7 +217,8 @@ namespace Diploma.Utils.ExcelHelpers
                     Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.BAK_RUK)
                 },
                 StudyYear = _studyYear,
-                Semester = _semesters.FirstOrDefault(s => s.Number == 8)
+                Semester = _semesters.FirstOrDefault(s => s.Number == 8),
+                Group = group4cource
             });
             disciplineWorkloads.Add(new DisciplineWorkload
             {
@@ -218,7 +227,8 @@ namespace Diploma.Utils.ExcelHelpers
                     Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.MAG_RUK)
                 },
                 StudyYear = _studyYear,
-                Semester = _semesters.FirstOrDefault(s => s.Number == 12)
+                Semester = _semesters.FirstOrDefault(s => s.Number == 12),
+                Group = group6cource
             });
             disciplineWorkloads.Add(new DisciplineWorkload
             {
@@ -227,7 +237,8 @@ namespace Diploma.Utils.ExcelHelpers
                     Discipline = baseDisciplines.FirstOrDefault(d => d.SpecialType == SpecialDisciplineKind.MAG_RETZ)
                 },
                 StudyYear = _studyYear,
-                Semester = _semesters.FirstOrDefault(s => s.Number == 12)
+                Semester = _semesters.FirstOrDefault(s => s.Number == 12),
+                Group = group6cource
             });
             disciplineWorkloads.Add(new DisciplineWorkload
             {

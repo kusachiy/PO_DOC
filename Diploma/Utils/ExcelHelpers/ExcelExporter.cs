@@ -39,8 +39,8 @@ namespace Diploma.Utils.ExcelHelpers
         }
         private static void PrintSemester(Employee employee, SemesterType semesterType, StudyYear year, Workbook objWorkBook)
         {
-            int descrList = semesterType == SemesterType.Autumm ? 1 : 2;
-            int paramsList = semesterType == SemesterType.Autumm ? 3 : 4;
+            int descrList = semesterType == SemesterType.Autumm ? 2 : 3;
+            int paramsList = semesterType == SemesterType.Autumm ? 4 : 5;
             List<DisciplineWorkload> workloads = semesterType == SemesterType.Autumm ?
                 _service.GetAllEmloyeeWorkloadsByYearAutumm(employee, year.Year) : _service.GetAllEmloyeeWorkloadsByYearSpring(employee, year.Year);
             if (workloads.Count > 0)
@@ -51,8 +51,9 @@ namespace Diploma.Utils.ExcelHelpers
                 foreach (var w in workloads)
                 {
                     DescrSheet.Cells[currentRow, IndPlanExport.Default.DisciplineNameColumn] = w.DisciplineYear.Discipline.ToString();
-                    if (w.DisciplineYear.Discipline.TypeOfDiscipline == DisciplineType.SPECIAL)
+                    if (w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.RUK_KAF)
                     {
+                        ParamsSheet.Cells[currentRow - 1, IndPlanExport.Default.DisciplineSettingsStartColumn + 14] = CalculationSettings.Default.RukKaf;
                         currentRow += 2;
                         continue;
                     }
@@ -82,20 +83,20 @@ namespace Diploma.Utils.ExcelHelpers
                     double other = 0;
                     double geks = 0;
                     double ruk = 0;
-                    //TODO: Тут надо подумать. uchPr - больше нету в базовом классе
                     double uchPr = w.DisciplineYear.CountOfLearnigPracticeWeeks * Properties.CalculationSettings.Default.UchPr;
                     double prPr = w.DisciplineYear.CountOfManufacturePracticeWeeks * Properties.CalculationSettings.Default.PrPr;
                     double preddipPr = w.DisciplineYear.CountOfUndergraduatePracticeWeeks * Properties.CalculationSettings.Default.PreddipPr;
                     double NIIR = w.DisciplineYear.CountOfNIIR * Properties.CalculationSettings.Default.NIIR * countStud;//нир
                     double GEK = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GEK ? (Properties.CalculationSettings.Default.GEK * countStud) : 0;//ГЭК.
-                    double GAKpred = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK_PRED? (Properties.CalculationSettings.Default.GEK * countStud) : 0;
+                    double GAKpred = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK_PRED ? (Properties.CalculationSettings.Default.GEK * countStud) : 0;
                     double GAK = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK ? (Properties.CalculationSettings.Default.GAK * countStud) : 0;//ГAК
                     double rukMag = w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.MAG_RUK ? (Properties.CalculationSettings.Default.MAGRuk * countStud) : 0;//рук маг
                     geks = GEK + GAK + GAKpred;
                     ruk += w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.ASP_RUK ? (Properties.CalculationSettings.Default.AspRuk * countStud) : 0f;
                     ruk += rukMag;
                     ruk += w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.BAK_RUK ? (countStud * Properties.CalculationSettings.Default.DPruk) : 0f;
-
+                    ruk += w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.MAG_RETZ ? countStud * CalculationSettings.Default.MagRetz : 0f;//MagRetz
+                    ruk += w.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.RUK_KAF ? countStud : 0f;//руководство кафедрой
                     other += NIIR;
                     /*string disciplineName = reader[0].ToString();
                     if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
@@ -226,11 +227,20 @@ namespace Diploma.Utils.ExcelHelpers
 
             foreach (var d in dis_workloads)
             {
-                if (d.DisciplineYear.Discipline.TypeOfDiscipline == DisciplineType.SPECIAL)
-                {                    
-                    continue;
-                }
                 List<Worksheet> toWriteList = new List<Worksheet>();
+                Dictionary<Worksheet, Workload> assignsForTeachers = new Dictionary<Worksheet, Workload>();
+                if (d.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.RUK_KAF)
+                {
+                    var buf = _service.GetAllWorkloadsByLocalWorkload(d.Id);
+                    if (buf.Count == 1)
+                    {                
+                        string teacherName = buf[0].Employee?.Name;
+                        var sheet = ObjWorkBook.Sheets[teacherName];                       
+                        toWriteList.Add(sheet);
+                        assignsForTeachers.Add(sheet, buf[0]);                      
+                    }
+                continue;
+                }
                 if (d.Group.Speciality.Faculty.ShortName == "МСФ")
                     toWriteList.Add(ObjWorkBook.Sheets[6]);
                 else
@@ -245,7 +255,6 @@ namespace Diploma.Utils.ExcelHelpers
                             toWriteList.Add(ObjWorkBook.Sheets[8]);
                     }
                 }
-                Dictionary<Worksheet, Workload> assignsForTeachers = new Dictionary<Worksheet, Workload>();
                 List<Workload> assigns = _service.GetAllWorkloadsByLocalWorkload(d.Id);
                 if (assigns.Count != 0)
                 {
@@ -321,21 +330,20 @@ namespace Diploma.Utils.ExcelHelpers
             sheet.Cells[rowCounters[sheet], 22 + 23] = disciplineWorkload.DisciplineYear.CountOfNIIR != 0 ? (disciplineWorkload.DisciplineYear.CountOfNIIR) * CalculationSettings.Default.NIIR * countStud : 0;//нир
             ((Range)(sheet.Cells[rowCounters[sheet], 24 + 23])).Value = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GEK ? (CalculationSettings.Default.GEK * countStud) : 0;//ГЭК.
             sheet.Cells[rowCounters[sheet], 25 + 23] = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK ? (CalculationSettings.Default.GAK * countStud) : 0;//ГAК.
-                                                                                                                                                                                                 /*sheet.Cells[rowCounters[sheet], 26 + 23] = Convert.ToBoolean(reader[24]) ? (ApplicationSettings.CalculationSettings.GAKPred * countStud) : 0;//ГAКпред.
-                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 27 + 23] = Convert.ToBoolean(reader[25]) ? (ApplicationSettings.CalculationSettings.DPruk * countStud) : 0;//допуск
-                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 28 + 23] = Convert.ToBoolean(reader[26]) ? (4 * countStud).ToString() : "";//рец дисс.
-                                                                                                                                                                                                 */
-                                                                                                                                                                                                 /*string disciplineName = reader[4].ToString();
-                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
-                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
-                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
-                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;
-                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 32 + 23] = Convert.ToBoolean(reader[30]) ? (30 * Convert.ToInt32(reader[30])).ToString() : "";//рук маг
-                                                                                                                                                                                                 sheet.Cells[rowCounters[sheet], 31 + 23] = Convert.ToBoolean(reader[29]) ? (countStud * ApplicationSettings.CalculationSettings.AspRuk) : 0f;
-                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
-                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
-                                                                                                                                                                                                 if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
-                                                                                                                                                                                                     sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;*/
+            sheet.Cells[rowCounters[sheet], 26 + 23] = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.GAK_PRED ? (CalculationSettings.Default.GAKPred * countStud) : 0;//ГAКпред.
+            sheet.Cells[rowCounters[sheet], 27 + 23] = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.BAK_RUK ? (CalculationSettings.Default.DPruk * countStud) : 0;
+            sheet.Cells[rowCounters[sheet], 28 + 23] = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.MAG_RETZ ? (CalculationSettings.Default.MagRetz * countStud).ToString() : "";//рец дисс.
+            /*string disciplineName = reader[4].ToString();
+            if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
+                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
+            if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
+                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;*/
+            sheet.Cells[rowCounters[sheet], 32 + 23] = disciplineWorkload.DisciplineYear.Discipline.SpecialType == SpecialDisciplineKind.MAG_RUK ? (CalculationSettings.Default.MAGRuk * countStud).ToString() : "";//рук маг
+            //sheet.Cells[rowCounters[sheet], 31 + 23] = Convert.ToBoolean(reader[29]) ? (countStud * ApplicationSettings.CalculationSettings.AspRuk) : 0f;
+            /*if (disciplineName.ToLower().Contains("норм") && disciplineName.ToLower().Contains("маг"))
+                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.NormocontrolMag;
+            if (disciplineName.ToLower().Contains("доп") && disciplineName.ToLower().Contains("маг"))
+                sheet.Cells[rowCounters[sheet], 32 + 23] = countStud * ApplicationSettings.CalculationSettings.DopuskDissMag;*/
             rowCounters[sheet]++;
         }
     }
