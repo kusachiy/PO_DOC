@@ -1,4 +1,6 @@
-﻿using Diploma.Controls.Managers;
+﻿using DBRepository;
+using DBRepository.Migrations;
+using Diploma.Controls.Managers;
 using Diploma.Dialogs;
 using Diploma.Dialogs.Managers;
 using Diploma.Services;
@@ -8,6 +10,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,6 +92,7 @@ namespace Diploma.Screens.Managers
                 OpenDBPathDialog();
                 return;
             }
+            
             RaisePropertyChanged("Departments");
             SetWaiting(false);
         }

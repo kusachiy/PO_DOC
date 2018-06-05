@@ -47,6 +47,10 @@ namespace Models
         ASP_RETZ,
         [Description("Руководство кафедрой")]
         RUK_KAF,
+        [Description("Нормоконтроль магистров")]
+        NCTRL_MAG,
+        [Description("Допуск к диссертации магистров")]
+        DOPUSK_DISS,
     }
 
     public class Discipline : IEntity
@@ -61,6 +65,9 @@ namespace Models
         public PracticeKind? PracticeType { get; set; }
         public string StringSpecialType => SpecialType?.ToDescriptionString() ?? "";
         public string StringPracticeType => PracticeType?.ToDescriptionString() ?? "";
+
+        public int CountOfWorkloads { get; set; }
+        public bool IsActiveDiscipline { get; set; }
 
         [NotMapped]
         public int SpecialTypeSelector
@@ -78,6 +85,8 @@ namespace Models
         public Discipline()
         {
             Id = Guid.NewGuid();
+            CountOfWorkloads = 1;
+            IsActiveDiscipline = true;
         }
         public override string ToString()
         {

@@ -64,7 +64,9 @@ namespace DBRepository.Migrations
                 new Discipline { DepartmentId = dep.Id, Name = "Руководство магистрами", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.MAG_RUK },
                 new Discipline { DepartmentId = dep.Id, Name = "Руководство бакалаврами", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.BAK_RUK },
                 new Discipline { DepartmentId = dep.Id, Name = "Рецензирование магистранстких работ", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.MAG_RETZ},
-                new Discipline { DepartmentId = dep.Id, Name = "Руководство кафедрой", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.RUK_KAF }
+                new Discipline { DepartmentId = dep.Id, Name = "Руководство кафедрой", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.RUK_KAF },
+                new Discipline { DepartmentId = dep.Id, Name = "Нормоконтроль магистров", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.NCTRL_MAG,IsActiveDiscipline = false },
+                new Discipline { DepartmentId = dep.Id, Name = "Допуск к диссертации магистров", TypeOfDiscipline = DisciplineType.SPECIAL, SpecialType = SpecialDisciplineKind.DOPUSK_DISS, IsActiveDiscipline = false }                
                );
             context.SpecialPositions.AddOrUpdate(
                 s => s.Name,

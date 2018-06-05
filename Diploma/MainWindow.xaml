@@ -121,7 +121,7 @@
                     Background="{DynamicResource MahApps.Metro.HamburgerMenu.PaneBackgroundBrush}"
                     Command="{Binding ShowSpecialPositionsDialog}"
                     Foreground="White"
-                    Header="Специальные должности"
+                    Header="Специальные нагрузки"
                     Icon="{iconPacks:Material Kind=AccountBox}" />
             </MenuItem>
 

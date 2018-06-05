@@ -18,62 +18,35 @@ namespace Diploma.Dialogs.Managers
     {
         public Action OnExit { get; set; }
 
-        public ObservableCollection<SpecialPosition> SpecialPositions { get; set; }
-        public ObservableCollection<Employee> Employees { get; set; }
-
+        public ObservableCollection<Discipline> SpecialDisciplines { get; set; }
         private SpecialPosition _selectedPosition;
-        public SpecialPosition SelectedPosition { get { return _selectedPosition; } set { _selectedPosition = value;RaisePropertyChanged(); } }
+        public SpecialPosition SelectedDiscipline { get { return _selectedPosition; } set { _selectedPosition = value;RaisePropertyChanged(); } }
         public SpecialPositionsManager()
         {
             Panel = new PanelManager
-            {
-                LeftButtons = new List<PanelButtonManager>
-                {
-                    new PanelButtonManager{OnButtonAction = o=> Add(),Icon = PackIconModernKind.Add,Text = "Add"},                   
-                },               
+            {                             
 
                 RightButtons = new List<PanelButtonManager>
                 {
-                    new PanelButtonManager{OnButtonAction = o=> Save(),Icon = PackIconModernKind.Save,Text = "Save"},
-                    new PanelButtonManager{OnButtonAction =o=>Delete(),Icon = PackIconModernKind.Delete,Text="DeleteRow"}
+                    new PanelButtonManager{OnButtonAction = o=> Save(),Icon = PackIconModernKind.Save,Text = "Save"}                    
                 }
             };
         }
-
-        private async void Delete()
-        {
-            if (SelectedPosition == null)
-                return;
-            var service = Get<IGeneralService>();
-            service.DeleteSpecialPosition(SelectedPosition);
-            Refresh();
-        }
-
-        private void Add()
-        {
-            if (Employees.Count == 0)
-                return;
-            var pos = new SpecialPosition { Executor = Employees.FirstOrDefault() };
-            SpecialPositions.Add(pos);
-            SelectedPosition = pos;
-            RaisePropertyChanged("SpecialPositions");
-        }
+       
 
         private void Save()
         {
             var service = Get<IGeneralService>();
-            foreach (var sp in SpecialPositions)
-                service.AddOrUpdateSpecialPosition(sp);
+            foreach (var sd in SpecialDisciplines)
+                service.AddOrUpdateDiscipline(sd);
             OnExit();
         }
 
         public override async void Refresh()
         {
             var service = Get<IGeneralService>();
-            SpecialPositions = new ObservableCollection<SpecialPosition>(await Task.Run(() => service.GetAllSpecialPostitions()));
-            Employees = new ObservableCollection<Employee>(await Task.Run(() => service.GetAllEmployees().OrderBy(s=>s.Name)));
-            RaisePropertyChanged("SpecialPositions");
-            RaisePropertyChanged("Employees");
+            SpecialDisciplines = new ObservableCollection<Discipline>(await Task.Run(() => service.GetAllSpecialDisciplines()));
+            RaisePropertyChanged("SpecialDisciplines");  
         }
     }
 }

@@ -35,38 +35,27 @@
             <RowDefinition Height="80" />
         </Grid.RowDefinitions>
         <Grid.Resources />
-        <GroupBox Header="Специальные должности">
+        <GroupBox Header="Специальные нагрузки">
             <DataGrid
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 IsSynchronizedWithCurrentItem="True"
-                ItemsSource="{Binding SpecialPositions}"
+                ItemsSource="{Binding SpecialDisciplines}"
                 SelectedItem="{Binding SelectedPosition}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                        Width="2*"
+                        Width="3*"
                         Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                         Header="Должность" />
-                    <DataGridTemplateColumn Width="2*" Header="Исполнитель">
-                        <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox
-                                                    Margin="0,5,0,0"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Center"
-                                                    controls:TextBoxHelper.Watermark="Выберите исполнителя.."
-                                                    DisplayMemberPath="Name"
-                                                    IsEditable="True"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding DataContext.Employees, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                    MaxDropDownHeight="125"
-                                                    SelectedItem="{Binding Executor, NotifyOnSourceUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
-                                                    Style="{DynamicResource VirtualisedMetroComboBox}"
-                                                    Text="{Binding Executor.Name}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridCheckBoxColumn
+                        Width="2*"
+                        Binding="{Binding IsActiveDiscipline, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Активная" />
+                    <DataGridTextColumn
+                        Width="2*"
+                        Binding="{Binding CountOfWorkloads, UpdateSourceTrigger=PropertyChanged}"
+                        Header="Кол-во позиций" />
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
