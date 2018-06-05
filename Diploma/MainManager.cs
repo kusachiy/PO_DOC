@@ -62,7 +62,7 @@ namespace Diploma
 
         public MainManager()
         {            
-             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
+             Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
             _departmentsManager = new DepartmentsManager { SetWaiting = status => Waiting = status };
             _disciplinesManager = new DisciplinesManager{ SetWaiting = status => Waiting = status };
             _employeesManager = new EmployeesManager { SetWaiting = status => Waiting = status };

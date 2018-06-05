@@ -55,5 +55,6 @@ namespace Diploma.Services
         List<DisciplineWorkload> GetAllDisciplineWorkloadsByYearAndSemester(StudyYear selectedStudyYear, Semester selectedSemester);
         List<Discipline> GetAllSpecialDisciplines();
         void SaveDisciplineWorkloads(List<DisciplineWorkload> disciplineWorkloads);
+        Guid[] GetAllLastWorkloadEmployees(Discipline discipline, StudyYear studyYear);
     }
 }

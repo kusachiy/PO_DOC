@@ -277,16 +277,29 @@ namespace Diploma.Utils.ExcelHelpers
             Log = new List<string>();
             foreach (var dWorkload in _workloads)
             {
-                Guid? employeeId = _service.GetLastWorkloadEmployeeId(dWorkload.DisciplineYear.Discipline, dWorkload.Group, _studyYear);
-                Workload workload;
-                if (employeeId != null)
-                    workload = new Workload { EmployeeId = employeeId, LocalWorkloadId = dWorkload.Id };
+                if (dWorkload.DisciplineYear.Discipline.TypeOfDiscipline != DisciplineType.SPECIAL)
+                {
+                    Guid? employeeId = _service.GetLastWorkloadEmployeeId(dWorkload.DisciplineYear.Discipline, dWorkload.Group, _studyYear);
+                    Workload workload;
+                    if (employeeId != null)
+                        workload = new Workload { EmployeeId = employeeId, LocalWorkloadId = dWorkload.Id };
+                    else
+                    {
+                        workload = new Workload { LocalWorkloadId = dWorkload.Id };
+                        Log.Add($"Не удалось установить нагрузку [{dWorkload.DisciplineYear.Discipline.Name}] по данным прошлых лет");
+                    }
+                    _service.AddWorkload(workload);
+                }
                 else
                 {
-                    workload = new Workload { LocalWorkloadId = dWorkload.Id };
-                    Log.Add($"Не удалось установить нагрузку [{dWorkload.DisciplineYear.Discipline.Name}] по данным прошлых лет");
+                    Guid[] employeesId = _service.GetAllLastWorkloadEmployees(dWorkload.DisciplineYear.Discipline, _studyYear);
+                    if (employeesId == null || employeesId.Length == 0)
+                        _service.AddWorkload(new Workload { LocalWorkloadId = dWorkload.Id });
+                    foreach (var e in employeesId)
+                    {
+                        _service.AddWorkload(new Workload { EmployeeId = e, LocalWorkloadId = dWorkload.Id });
+                    }
                 }
-                _service.AddWorkload(workload);
             }
         }
 

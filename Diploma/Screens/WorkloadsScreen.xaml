@@ -54,6 +54,7 @@
                 CanUserDeleteRows="False"
                 IsReadOnly="True"
                 ItemsSource="{Binding Workloads}"
+                RowHeight="12"
                 SelectedItem="{Binding SelectedWorkload}">
                 <DataGrid.Columns>
                     <DataGridTextColumn

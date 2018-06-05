@@ -567,5 +567,19 @@ namespace Diploma.Services
                 AddOrUpdateDisciplineWorkload(d);
             }
         }
+
+        public Guid[] GetAllLastWorkloadEmployees(Discipline discipline, StudyYear studyYear)
+        {
+            using (Db.BeginReadOnlyWork())
+            {
+                if (_workloadRepository.Count() == 0)
+                    return null;
+                var workloads = _workloadRepository.GetMany(
+                    w => w.LocalWorkload.DisciplineYear.DisciplineId == discipline.Id
+                    //&& w.LocalWorkload.Group.SpecialityId == group.SpecialityId
+                    && w.LocalWorkload.StudyYear.Year == studyYear.Year - 1);
+                return workloads?.Where(w=>w.EmployeeId!=null).Select(w=>(Guid)w.EmployeeId).ToArray();
+            }
+        }
     }
 }
