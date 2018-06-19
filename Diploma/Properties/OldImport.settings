@@ -33,7 +33,7 @@
       <Value Profile="(Default)">17</Value>
     </Setting>
     <Setting Name="Select" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2</Value>
+      <Value Profile="(Default)">4</Value>
     </Setting>
     <Setting Name="DS" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
@@ -46,6 +46,9 @@
     </Setting>
     <Setting Name="Semester" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">6</Value>
+    </Setting>
+    <Setting Name="CountOfStudents" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -1,6 +1,7 @@
 ﻿using Models.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,10 @@ namespace Models
 {
     public enum SemesterType
     {
-        Autumm,Spring
+        [Description("Осенний")]
+        Autumm,
+        [Description("Весенний")]
+        Spring
     }
     public class Semester : IEntity
     {

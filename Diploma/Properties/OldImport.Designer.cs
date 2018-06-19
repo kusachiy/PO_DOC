@@ -145,7 +145,7 @@ namespace Diploma.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
         public int Select {
             get {
                 return ((int)(this["Select"]));
@@ -200,6 +200,18 @@ namespace Diploma.Properties {
             }
             set {
                 this["Semester"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int CountOfStudents {
+            get {
+                return ((int)(this["CountOfStudents"]));
+            }
+            set {
+                this["CountOfStudents"] = value;
             }
         }
     }

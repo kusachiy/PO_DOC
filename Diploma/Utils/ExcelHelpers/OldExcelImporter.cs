@@ -14,6 +14,7 @@ namespace Diploma.Utils.ExcelHelpers
 {
     class OldExcelImporter:IImorter
     {
+        public const int DEFAULT_COUNT_OF_STUDENTS = 13;
         Excel.Application xlApp;
         Excel.Workbook xlWorkBook;
         Excel.Worksheet xlWorkSheet;
@@ -32,6 +33,7 @@ namespace Diploma.Utils.ExcelHelpers
         List<Group> _groups;
         List<Speciality> _specialities;
         StudyYear _studyYear;
+        
 
         public OldExcelImporter()
         {
@@ -67,6 +69,7 @@ namespace Diploma.Utils.ExcelHelpers
             {                
                 string specialityName = "ПИН.РИС";
                 string semester = xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.Semester);
+                int countOfStudents = xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.CountOfStudents) != "" ? Convert.ToInt32(xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.CountOfStudents)) : DEFAULT_COUNT_OF_STUDENTS;
                 string disciplineName = xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.Discipline);
                 int lectures = xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.Lectures) != "" ? Convert.ToInt32(xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.Lectures)) : 0;
                 int labs = xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.Labs) != "" ? Convert.ToInt32(xlWorkSheet.GetCellText(counter, Properties.OldImport.Default.Labs)) : 0;
@@ -137,7 +140,7 @@ namespace Diploma.Utils.ExcelHelpers
                         return false;
                     }
                     if ((gr = _newGroups.FirstOrDefault(g => g.Speciality == speciality && g.EntryYear == entryYear)) == null)
-                        _newGroups.Add(gr = new Group { EntryYear = entryYear, Name = $"{specialityName}{entryYear}", Speciality = speciality });
+                        _newGroups.Add(gr = new Group { EntryYear = entryYear, Name = $"{specialityName}{entryYear}", Speciality = speciality,CountOfStudents = countOfStudents });
                     Log.Add($"Неизвестная группа {specialityName} поступившая в {entryYear} год. Строка {counter}");
                 }
                 workload.Group = gr;
@@ -166,7 +169,7 @@ namespace Diploma.Utils.ExcelHelpers
             foreach (var workload in _workloads) //6с.
                 _service.AddOrUpdateDisciplineWorkload(workload);
             _groups.AddRange(_newGroups);
-            InsertBaseDisciplines();
+            //InsertBaseDisciplines();
             WorkloadAssigmnent();
         }
         private void InsertBaseDisciplines()

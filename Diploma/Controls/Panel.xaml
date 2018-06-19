@@ -26,7 +26,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
         <ItemsControl ItemsSource="{Binding MiddleButtons}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -39,7 +38,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
         <ItemsControl ItemsSource="{Binding RightButtons}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

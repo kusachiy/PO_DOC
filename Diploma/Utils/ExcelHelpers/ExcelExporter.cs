@@ -43,6 +43,7 @@ namespace Diploma.Utils.ExcelHelpers
             int paramsList = semesterType == SemesterType.Autumm ? 4 : 5;
             List<DisciplineWorkload> workloads = semesterType == SemesterType.Autumm ?
                 _service.GetAllEmloyeeWorkloadsByYearAutumm(employee, year.Year) : _service.GetAllEmloyeeWorkloadsByYearSpring(employee, year.Year);
+            workloads = workloads.OrderBy(w => w.Semester.Number).ToList();
             if (workloads.Count > 0)
             {
                 Worksheet DescrSheet = (Worksheet)objWorkBook.Sheets[descrList];
@@ -120,8 +121,9 @@ namespace Diploma.Utils.ExcelHelpers
 
             string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Templates\SemesterTemplate.xltx");
             Dictionary<string, int> counts = new Dictionary<string, int>() { { "ФИТ", 0 }, { "МСФ", 0 }, { "ИДПО", 0 }, { "МАГ", 0 } };
-            List<DisciplineWorkload> workloadrs = _service.GetAllDisciplineWorkloadsByYearAndSemesterType(year.Year, semester);
-            if (workloadrs.Count > 0)
+            List<DisciplineWorkload> workloads = _service.GetAllDisciplineWorkloadsByYearAndSemesterType(year.Year, semester);
+            workloads = workloads.OrderBy(w => w.Semester.Number).ToList();
+            if (workloads.Count > 0)
             {
                 Microsoft.Office.Interop.Excel.Application ObjExcel = new Microsoft.Office.Interop.Excel.Application();
                 Workbook ObjWorkBook;
@@ -129,8 +131,8 @@ namespace Diploma.Utils.ExcelHelpers
                 ObjWorkBook = ObjExcel.Workbooks.Add(path);
                 ObjWorkSheet = (Worksheet)ObjWorkBook.Sheets[1];
                 ObjWorkBook.Title = string.Format("Отчет {0} семестр({1} / {2})", semester.ToDescriptionString(), year.Year, year.Year + 1);
-                ObjWorkSheet.Cells[3, 1] = string.Format("экзаменационной сессии  за  {0} семестр {1} / {2} учебного года", semester, year.Year, Convert.ToInt32(year.Year) + 1);
-                foreach (var w in workloadrs)
+                ObjWorkSheet.Cells[3, 1] = string.Format("экзаменационной сессии  за  {0} семестр {1} / {2} учебного года", semester.ToDescriptionString(), year.Year, year.Year + 1);
+                foreach (var w in workloads)
                 {
                     int rowCounter = SemesterExport.Default.FITStartRow;
                     if (w.DisciplineYear.Discipline.TypeOfDiscipline == DisciplineType.SPECIAL)
@@ -217,7 +219,7 @@ namespace Diploma.Utils.ExcelHelpers
             {
                 ObjWorkBook.Sheets[i].Cells[1, 17] = string.Format("{0} / {1}", year.Year, year.Year + 1);
             }
-            List<DisciplineWorkload> dis_workloads = _service.GetAllDisciplineWorkloadsByYear(year);
+            List<DisciplineWorkload> dis_workloads = _service.GetAllDisciplineWorkloadsByYear(year).OrderBy(s=>s.Semester.Number).ToList();          
             Dictionary<Worksheet, int> rowCounters = new Dictionary<Worksheet, int>();
             //пишем данные
             for (int i = 2; i <= 17; i++)
