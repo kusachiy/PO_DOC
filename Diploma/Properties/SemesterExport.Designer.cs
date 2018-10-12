@@ -12,7 +12,7 @@ namespace Diploma.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
     internal sealed partial class SemesterExport : global::System.Configuration.ApplicationSettingsBase {
         
         private static SemesterExport defaultInstance = ((SemesterExport)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new SemesterExport())));
